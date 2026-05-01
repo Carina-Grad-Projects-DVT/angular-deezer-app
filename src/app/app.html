@@ -1,9 +1,35 @@
-<div class="flex h-screen bg-bg-base text-text-base">
-  <aside class="w-64 bg-bg-base border-r border-border-default p-4">
+<div class="flex min-h-screen bg-bg-base text-text-base">
+  <header
+    class="fixed inset-x-0 top-0 z-40 flex h-14 items-center border-b border-border-default bg-bg-base px-4 md:hidden"
+  >
+    <button
+      class="rounded-md border border-border-default px-3 py-1 text-text-base"
+      type="button"
+      (click)="openSidebar()"
+      aria-label="Open navigation menu"
+    >
+      ☰
+    </button>
+  </header>
+
+  @if (isSidebarOpen()) {
+    <button
+      class="fixed inset-0 z-40 bg-black/50 md:hidden"
+      type="button"
+      (click)="closeSidebar()"
+      aria-label="Close navigation menu"
+    ></button>
+  }
+
+  <aside
+    class="fixed inset-y-0 left-0 z-50 w-72 border-r border-border-default bg-bg-base p-4 transition-transform duration-300 md:static md:z-auto md:w-64 md:translate-x-0"
+    [class.-translate-x-full]="!isSidebarOpen()"
+    [class.translate-x-0]="isSidebarOpen()"
+  >
     <app-sidebar></app-sidebar>
   </aside>
 
-  <main class="flex-1 bg-bg-base p-6 overflow-auto">
+  <main class="w-full flex-1 overflow-auto p-4 pt-16 md:p-6 md:pt-6">
     <router-outlet></router-outlet>
   </main>
 </div>

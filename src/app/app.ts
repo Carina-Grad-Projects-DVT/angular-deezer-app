@@ -11,4 +11,13 @@ import { Sidebar } from './shared/components/sidebar/sidebar.component';
 })
 export class App {
   protected readonly title = signal('angular-deezer-app');
+  protected readonly isSidebarOpen = signal(false);
+
+  protected openSidebar(): void {
+    this.isSidebarOpen.set(true);
+  }
+
+  protected closeSidebar(): void {
+    this.isSidebarOpen.set(false);
+  }
 }
