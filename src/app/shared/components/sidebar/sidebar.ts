@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
 import { PanelMenuModule } from 'primeng/panelmenu';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [PanelMenuModule, ButtonModule],
+  imports: [PanelMenuModule],
   templateUrl: './sidebar.html',
   standalone: true,
 })
