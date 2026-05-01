@@ -5,7 +5,7 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 @Component({
   selector: 'app-sidebar',
   imports: [PanelMenuModule, ButtonModule],
-  templateUrl: './sidebar.component.html',
+  templateUrl: './sidebar.html',
   standalone: true,
 })
 export class Sidebar {

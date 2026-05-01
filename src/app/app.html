@@ -8,10 +8,10 @@
       (click)="openSidebar()"
       aria-label="Open navigation menu"
     >
+      <!-- TODO: Better icon -->
       ☰
     </button>
   </header>
-
   @if (isSidebarOpen()) {
     <button
       class="fixed inset-0 z-40 bg-black/50 md:hidden"
@@ -20,7 +20,6 @@
       aria-label="Close navigation menu"
     ></button>
   }
-
   <aside
     class="fixed inset-y-0 left-0 z-50 w-72 border-r border-border-default bg-bg-base p-4 transition-transform duration-300 md:static md:z-auto md:w-64 md:translate-x-0"
     [class.-translate-x-full]="!isSidebarOpen()"
@@ -28,7 +27,6 @@
   >
     <app-sidebar></app-sidebar>
   </aside>
-
   <main class="w-full flex-1 overflow-auto p-4 pt-16 md:p-6 md:pt-6">
     <router-outlet></router-outlet>
   </main>
