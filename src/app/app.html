@@ -1,3 +1,9 @@
-<main class="bg-bg-base"><h1 class="text-brand-green">HELLO WORLD</h1></main>
+<div class="flex h-screen bg-bg-base text-text-base">
+  <aside class="w-64 bg-bg-base border-r border-border-default p-4">
+    <app-sidebar></app-sidebar>
+  </aside>
 
-<router-outlet />
+  <main class="flex-1 bg-bg-base p-6 overflow-auto">
+    <router-outlet></router-outlet>
+  </main>
+</div>
