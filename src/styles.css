@@ -1,6 +1,97 @@
-/* You can add global styles to this file, and also import other style files */
-
-@import 'tailwindcss';
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
 @custom-variant dark (&:where(.my-app-dark, .my-app-dark *));
+
+:root {
+  --bg-base: #121212;
+  --bg-surface: #181818;
+  --bg-mid: #1f1f1f;
+  --bg-card: #252525;
+
+  --text-base: #ffffff;
+  --text-muted: #b3b3b3;
+  --text-soft: #cbcbcb;
+  --text-faint: #fdfdfd;
+
+  --brand-green: #1ed760;
+  --brand-green-border: #1db954;
+
+  --semantic-error: #f3727f;
+  --semantic-warning: #ffa42b;
+  --semantic-info: #539df5;
+
+  --border-default: #4d4d4d;
+  --border-light: #7c7c7c;
+}
+
+@theme {
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-mid: var(--bg-mid);
+  --color-bg-card: var(--bg-card);
+
+  --color-text-base: var(--text-base);
+  --color-text-muted: var(--text-muted);
+  --color-text-soft: var(--text-soft);
+  --color-text-faint: var(--text-faint);
+
+  --color-brand-green: var(--brand-green);
+  --color-brand-green-border: var(--brand-green-border);
+
+  --color-semantic-error: var(--semantic-error);
+  --color-semantic-warning: var(--semantic-warning);
+  --color-semantic-info: var(--semantic-info);
+
+  --color-border-default: var(--border-default);
+  --color-border-light: var(--border-light);
+
+  --font-ui: SpotifyMixUI, SpotifyMixUITitle, Helvetica Neue, Arial, sans-serif;
+  --font-title: SpotifyMixUITitle, SpotifyMixUI, Helvetica Neue, Arial, sans-serif;
+
+  --text-micro: 10px;
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 24px;
+
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --tracking-button: 0.14em;
+  --tracking-wide: 0.18em;
+
+  --spacing-1: 2px;
+  --spacing-2: 4px;
+  --spacing-3: 6px;
+  --spacing-4: 8px;
+  --spacing-5: 10px;
+  --spacing-6: 12px;
+  --spacing-7: 14px;
+  --spacing-8: 16px;
+  --spacing-10: 20px;
+  --spacing-12: 24px;
+  --spacing-16: 32px;
+  --spacing-20: 40px;
+  --spacing-24: 48px;
+
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-pill: 9999px;
+  --radius-full: 50%;
+
+  --shadow-spotify: rgba(0, 0, 0, 0.3) 0px 8px 8px;
+  --shadow-spotify-heavy: rgba(0, 0, 0, 0.5) 0px 8px 24px;
+  --shadow-inset-border: rgb(18, 18, 18) 0px 1px 0px, rgb(124, 124, 124) 0px 0px 0px 1px inset;
+
+  --breakpoint-xs: 425px;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+}

@@ -120,7 +120,7 @@ Build something impressive. Search for artists, explore albums, display track li
 - [x] `@angular-eslint` rules enabled
 - [x] `no-explicit-any`, `no-unused-vars`, `eqeqeq` rules active
 - [x] Prettier integrated
-- [] Prettier consisten
+- [] Prettier consistent
 
 ---
 
