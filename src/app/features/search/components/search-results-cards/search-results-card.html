@@ -4,13 +4,13 @@
   <p-card class="!bg-bg-mid">
     <div class="flex items-center gap-4">
       <img
-        src="https://via.placeholder.com/80"
-        alt="Artist image"
+        [src]="artist().picture_medium"
+        [alt]="artist().name + ' profile image'"
         class="w-16 h-16 rounded-lg object-cover"
       />
       <div class="flex-1">
-        <h3 class="text-lg font-semibold">Artist Name</h3>
-        <!-- TODO: Add stats -->
+        <h3 class="text-lg font-semibold">{{ artist().name }}</h3>
+        <p class="text-sm opacity-80">{{ artist().nb_album }} albums</p>
       </div>
     </div>
   </p-card>

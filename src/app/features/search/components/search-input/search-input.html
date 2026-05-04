@@ -1,14 +1,11 @@
-<form
-  [formGroup]="form"
-  class="flex flex-col gap-4 min-w-75 md:min-w-125"
-  role="search"
-  aria-label="Artist search"
->
+<form class="flex flex-col gap-4 min-w-75 md:min-w-125" role="search" aria-label="Artist search">
   <input
+    #queryInput
     pInputText
     id="artist-search"
     type="search"
-    formControlName="query"
+    [value]="query()"
+    (input)="onInput(queryInput.value)"
     aria-describedby="artist-search-help"
     autocomplete="off"
     placeholder="Search artists..."
