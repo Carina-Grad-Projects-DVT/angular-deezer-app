@@ -4,7 +4,7 @@
     pInputText
     id="artist-search"
     type="search"
-    [value]="query()"
+    [value]="searchStore.query()"
     (input)="onInput(queryInput.value)"
     aria-describedby="artist-search-help"
     autocomplete="off"
