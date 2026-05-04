@@ -58,7 +58,7 @@ Build something impressive. Search for artists, explore albums, display track li
 ### Project Setup & Structure
 
 - **Angular 21** — standalone components throughout, zero NgModules
-- Feature-based folder structure e.g. `src/app/features/search`, `src/app/features/artist`
+- [x] Feature-based folder structure e.g. `src/app/features/search`, `src/app/features/artist`
 - Separation of concerns — services handle API calls, components handle the view
 - Naming conventions:
   - TypeScript — `camelCase`
