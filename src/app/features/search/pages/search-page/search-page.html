@@ -1,4 +1,4 @@
-<div class="flex flex-col items-center gap-16 md:gap-y-24">
+<div class="flex flex-col items-center gap-16 md:gap-y-24 pb-16">
   <h1 class="text-6xl font-bold">Artist Search</h1>
   <app-search-input
     (queryChange)="onQueryChange($event)"
@@ -17,7 +17,9 @@
   }
 
   @if (!isLoading() && !errorMessage() && artists().length > 0) {
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full min-w-75 md:min-w-125">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full min-w-75 md:min-w-125 lg:grid-cols-3 lg:px-32 md:px-16 px-6"
+    >
       @for (artist of artists(); track artist.id) {
         <app-search-results-card [artist]="artist"></app-search-results-card>
       }
