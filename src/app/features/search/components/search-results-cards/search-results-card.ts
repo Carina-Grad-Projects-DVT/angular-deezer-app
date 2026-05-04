@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { CardModule } from 'primeng/card';
-import { ArtistSearchResult } from '../../models/search.models';
+import { ArtistByNameResponse } from '../../../../shared/models/artist.models';
 
 @Component({
   selector: 'app-search-results-card',
@@ -9,5 +9,5 @@ import { ArtistSearchResult } from '../../models/search.models';
   imports: [CardModule],
 })
 export class SearchResultsCard {
-  readonly artist = input.required<ArtistSearchResult>();
+  readonly artist = input.required<ArtistByNameResponse>();
 }
