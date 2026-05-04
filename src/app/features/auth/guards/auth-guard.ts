@@ -3,8 +3,8 @@ import { CanActivateFn, Router } from '@angular/router';
 
 export const authGuard: CanActivateFn = () => {
   const router = inject(Router);
-  // TODO: Replace with real auth check using Deezer Auth Flow details
-  const isAuthenticated = false;
+  // TODO: Replace with real auth check using Deezer OAuth flow details.
+  const isAuthenticated = true;
 
   if (isAuthenticated) {
     return true;

@@ -21,7 +21,7 @@ Build something impressive. Search for artists, explore albums, display track li
 
 **Artist → Album → Track flow:**
 
-- Search must be debounced — no API call on every keystroke
+- [x] Search must be debounced — no API call on every keystroke
 - Artist page must show bio/info alongside the discography
 - Album page must show release date, genre, and tracklist
 - Each track must display duration, track number, and a playable 30s preview
@@ -58,7 +58,7 @@ Build something impressive. Search for artists, explore albums, display track li
 ### Project Setup & Structure
 
 - **Angular 21** — standalone components throughout, zero NgModules
-- Feature-based folder structure e.g. `src/app/features/search`, `src/app/features/artist`
+- [x] Feature-based folder structure e.g. `src/app/features/search`, `src/app/features/artist`
 - Separation of concerns — services handle API calls, components handle the view
 - Naming conventions:
   - TypeScript — `camelCase`
