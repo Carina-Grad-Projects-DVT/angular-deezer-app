@@ -1,22 +1,27 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { MenuItem } from 'primeng/api';
 import { PanelMenuModule } from 'primeng/panelmenu';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [PanelMenuModule],
+  imports: [PanelMenuModule, RouterModule],
   templateUrl: './sidebar.html',
   standalone: true,
 })
 export class Sidebar {
-  items = [
+  items: MenuItem[] = [
     {
-      label: 'Home',
-    },
-    {
-      label: 'Artists',
+      label: 'Search',
+      routerLink: '/search',
     },
     {
       label: 'Playlists',
+      routerLink: '/playlists',
+    },
+    {
+      label: 'Login',
+      routerLink: '/login',
     },
   ];
 }
