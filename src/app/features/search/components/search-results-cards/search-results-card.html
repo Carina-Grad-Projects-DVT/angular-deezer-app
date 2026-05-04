@@ -1,5 +1,7 @@
-<div
-  class="cursor-pointer transition hover:ring-2 hover:ring-brand-green hover:shadow-md hover:-translate-y-2 rounded-lg"
+<a
+  [routerLink]="['/artist', artist().id]"
+  [attr.aria-label]="'Open artist page for ' + artist().name"
+  class="block cursor-pointer transition hover:ring-2 hover:ring-brand-green hover:shadow-md hover:-translate-y-2 rounded-lg"
 >
   <p-card class="!bg-bg-mid">
     <div class="flex items-center gap-4">
@@ -14,4 +16,4 @@
       </div>
     </div>
   </p-card>
-</div>
+</a>
