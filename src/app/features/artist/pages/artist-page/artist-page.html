@@ -1,15 +1,17 @@
 <div
-  class="flex flex-col items-center justify-center md:gap-y-24 pb-16 lg:px-32 md:px-16 px-6 w-full"
+  class="flex flex-col items-center justify-center lg:gap-y-24 gap-16 mb:pb-16 lg:px-32 px-6 w-full"
 >
   @if (artistStore.selectedArtist(); as artist) {
-    <div class="flex items-center w-full rounded-lg px-6 py-10 bg-bg-mid justify-around">
+    <div
+      class="flex flex-col md:flex-row items-center w-full rounded-lg p-16 md:px-6 md:py-10 bg-bg-mid justify-around gap-12"
+    >
       <img
         [src]="artist.picture_xl || artist.picture_big || artist.picture_medium"
         [alt]="artist.name + ' profile image'"
-        class="w-1/4 h-full rounded-full object-cover ring-2 ring-brand-green shadow-md -translate-y-2"
+        class="w-1/2 md:w-[40%] lg:w-1/4 h-full rounded-full object-cover ring-2 ring-brand-green shadow-md -translate-y-2"
       />
       <div class="flex flex-col gap-8 items-center">
-        <h1 class="text-6xl font-bold">{{ artist.name }}</h1>
+        <h1 class="text-4xl lg:text-6xl font-bold text-center line-clamp-1">{{ artist.name }}</h1>
         <div class="flex gap-8">
           <p-card class="!bg-bg-mid">
             <p class="text-sm text-muted-color text-center">{{ artist.nb_fan }}</p>
