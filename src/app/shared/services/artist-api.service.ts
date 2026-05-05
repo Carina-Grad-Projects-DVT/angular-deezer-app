@@ -2,7 +2,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, of, map } from 'rxjs';
 import { BASE_URL } from '../../../environments/environment';
-import { ArtistbyIDResponse, ArtistByNameResponse, DeezerResponse } from '../models/artist.models';
+import {
+  ArtistbyIDResponse,
+  ArtistByNameResponse,
+  DeezerAlbum,
+  DeezerArtistAlbumsResponse,
+  DeezerResponse,
+} from '../models/artist.models';
 
 @Injectable({ providedIn: 'root' })
 export class ArtistApiService {
@@ -25,5 +31,11 @@ export class ArtistApiService {
 
   getArtistById(id: number): Observable<ArtistbyIDResponse> {
     return this.http.get<ArtistbyIDResponse>(`${this.apiBaseUrl}/artist/${id}`);
+  }
+
+  getAlbumsByArtistId(id: number): Observable<DeezerAlbum[]> {
+    return this.http
+      .get<DeezerArtistAlbumsResponse>(`${this.apiBaseUrl}/artist/${id}/albums`)
+      .pipe(map((response) => response.data));
   }
 }

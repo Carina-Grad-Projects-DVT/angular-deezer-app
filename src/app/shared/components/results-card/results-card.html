@@ -1,0 +1,35 @@
+@if (routeLink(); as link) {
+  <a
+    [routerLink]="link"
+    [attr.aria-label]="ariaLabel()"
+    class="block cursor-pointer transition hover:ring-2 hover:ring-brand-green hover:shadow-md hover:-translate-y-2 rounded-lg"
+  >
+    <p-card class="!bg-bg-mid">
+      <div class="flex items-center gap-4">
+        <img [src]="imageUrl()" [alt]="imageAlt()" class="w-24 h-24 rounded-lg object-cover" />
+        <div class="flex-1">
+          <h3 class="text-lg font-semibold line-clamp-1">{{ title() }}</h3>
+          @if (subtitle()) {
+            <p class="text-sm opacity-80">{{ subtitle() }}</p>
+          }
+        </div>
+      </div>
+    </p-card>
+  </a>
+} @else {
+  <div
+    class="block transition hover:ring-2 hover:ring-brand-green hover:shadow-md hover:-translate-y-2 rounded-lg"
+  >
+    <p-card class="!bg-bg-mid">
+      <div class="flex items-center gap-4">
+        <img [src]="imageUrl()" [alt]="imageAlt()" class="w-24 h-24 rounded-lg object-cover" />
+        <div class="flex-1">
+          <h3 class="text-lg font-semibold line-clamp-1">{{ title() }}</h3>
+          @if (subtitle()) {
+            <p class="text-sm opacity-80">{{ subtitle() }}</p>
+          }
+        </div>
+      </div>
+    </p-card>
+  </div>
+}

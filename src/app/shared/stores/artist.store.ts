@@ -1,7 +1,7 @@
 import { Injectable, Injector, computed, effect, inject, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ArtistApiService } from '../services/artist-api.service';
-import { ArtistbyIDResponse, ArtistByNameResponse } from '../models/artist.models';
+import { ArtistbyIDResponse, ArtistByNameResponse, DeezerAlbum } from '../models/artist.models';
 
 @Injectable({ providedIn: 'root' })
 export class ArtistStore {
@@ -10,6 +10,7 @@ export class ArtistStore {
   readonly query = signal('');
   readonly artists = signal<ArtistByNameResponse[]>([]);
   readonly selectedArtist = signal<ArtistbyIDResponse | null>(null);
+  readonly hasLoadedAlbums = signal(false);
   readonly isLoading = signal(false);
   readonly errorMessage = signal<string | null>(null);
   readonly hasSearchResults = computed(() => this.artists().length > 0);
@@ -75,5 +76,27 @@ export class ArtistStore {
 
   clearSelectedArtist(): void {
     this.selectedArtist.set(null);
+  }
+
+  readonly albums = signal<DeezerAlbum[]>([]);
+
+  loadAlbumsByArtistId(id: number): void {
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
+    this.hasLoadedAlbums.set(false);
+
+    this.artistApiService.getAlbumsByArtistId(id).subscribe({
+      next: (albums) => {
+        this.albums.set(albums);
+        this.hasLoadedAlbums.set(true);
+      },
+      error: () => {
+        this.errorMessage.set('Error loading artist albums. Please try again.');
+        this.albums.set([]);
+        this.hasLoadedAlbums.set(true);
+        this.isLoading.set(false);
+      },
+      complete: () => this.isLoading.set(false),
+    });
   }
 }

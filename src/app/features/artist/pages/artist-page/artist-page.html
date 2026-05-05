@@ -1,6 +1,48 @@
-<p>Artist page works</p>
-<!-- Artist header -->
-<!-- name  + image -->
-<!-- # fans + albums  -->
+<div class="flex flex-col items-center gap-16 md:gap-y-24 pb-16">
+  <div>
+    <h1 class="text-6xl font-bold">Artist Name</h1>
+    <!-- Image -->
+  </div>
+  <div>
+    <p-card header="10">
+      <p class="m-0">Fans</p>
+    </p-card>
+    <p-card header="10">
+      <p class="m-0">Albums</p>
+    </p-card>
+  </div>
+  <!-- TODO: Use spinner -->
+  @if (artistStore.isLoading()) {
+    <p class="text-sm text-center">Searching ...</p>
+  }
 
-<!-- Albums -->
+  @if (artistStore.errorMessage(); as message) {
+    <p class="text-sm text-center text-red-400">{{ message }}</p>
+  }
+
+  @if (artistStore.albums().length > 0) {
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full min-w-75 md:min-w-125 lg:grid-cols-3 lg:px-32 md:px-16 px-6"
+    >
+      @for (album of artistStore.albums(); track album.id) {
+        <app-results-card
+          [title]="album.title"
+          [subtitle]="album.record_type"
+          [imageUrl]="album.cover_medium"
+          [imageAlt]="album.title + ' album cover image'"
+          [routeLink]="['/album', album.id]"
+          [ariaLabel]="'Open album page for ' + album.title"
+        ></app-results-card>
+      }
+    </div>
+  }
+
+  @if (
+    artistStore.hasLoadedAlbums() &&
+    !artistStore.isLoading() &&
+    !artistStore.errorMessage() &&
+    artistStore.albums().length === 0
+  ) {
+    <p class="text-sm text-center">No albums found for this artist.</p>
+  }
+</div>
