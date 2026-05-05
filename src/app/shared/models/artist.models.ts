@@ -2,6 +2,11 @@ export interface DeezerResponse<T> {
   data: T[];
 }
 
+export interface DeezerPaginatedResponse<T> extends DeezerResponse<T> {
+  total: number;
+  next?: string;
+}
+
 export interface ArtistByNameResponse {
   id: number;
   name: string;
@@ -64,7 +69,7 @@ export interface AlbumByArtistResponse {
   artist: DeezerArtistAlbumsResponse;
 }
 
-export interface AlbumByIdResponse {
+export interface AlbumById {
   id: number;
   title: string;
   link: string;
@@ -89,3 +94,5 @@ export interface AlbumByIdResponse {
 
   artist: DeezerArtistSummary;
 }
+
+export type DeezerAlbumsResponse = DeezerPaginatedResponse<AlbumByArtistResponse>;
