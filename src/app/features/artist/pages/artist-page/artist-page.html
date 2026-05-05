@@ -1,1 +1,61 @@
-<p>Artist page works</p>
+<div
+  class="flex flex-col items-center justify-center lg:gap-y-24 gap-16 mb:pb-16 lg:px-32 px-6 w-full"
+>
+  @if (artistStore.selectedArtist(); as artist) {
+    <div
+      class="flex flex-col md:flex-row items-center w-full rounded-lg p-16 md:px-6 md:py-10 bg-bg-mid justify-around gap-12"
+    >
+      <img
+        [src]="artist.picture_xl || artist.picture_big || artist.picture_medium"
+        [alt]="artist.name + ' profile image'"
+        class="w-1/2 md:w-[40%] lg:w-1/4 h-full rounded-full object-cover ring-2 ring-brand-green shadow-md -translate-y-2"
+      />
+      <div class="flex flex-col gap-8 items-center">
+        <h1 class="text-4xl lg:text-6xl font-bold text-center line-clamp-1">{{ artist.name }}</h1>
+        <div class="flex gap-8">
+          <p-card class="!bg-bg-mid">
+            <p class="text-sm text-muted-color text-center">{{ artist.nb_fan }}</p>
+            <p class="text-md font-bold text-center uppercase">Fans</p>
+          </p-card>
+          <p-card class="!bg-bg-mid">
+            <p class="text-sm text-muted-color text-center">{{ artist.nb_album }}</p>
+            <p class="text-md font-bold text-center uppercase">Albums</p>
+          </p-card>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- TODO: Use spinner -->
+  @if (artistStore.isLoading()) {
+    <p class="text-sm text-center">Searching ...</p>
+  }
+
+  @if (artistStore.errorMessage(); as message) {
+    <p class="text-sm text-center text-red-400">{{ message }}</p>
+  }
+
+  @if (artistStore.albums().length > 0) {
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full min-w-75 md:min-w-125 lg:grid-cols-3">
+      @for (album of artistStore.albums(); track album.id) {
+        <app-results-card
+          [title]="album.title"
+          [subtitle]="album.record_type"
+          [imageUrl]="album.cover_medium"
+          [imageAlt]="album.title + ' album cover image'"
+          [routeLink]="['/album', album.id]"
+          [ariaLabel]="'Open album page for ' + album.title"
+        ></app-results-card>
+      }
+    </div>
+  }
+
+  @if (
+    artistStore.hasLoadedAlbums() &&
+    !artistStore.isLoading() &&
+    !artistStore.errorMessage() &&
+    artistStore.albums().length === 0
+  ) {
+    <p class="text-sm text-center">No albums found for this artist.</p>
+  }
+</div>

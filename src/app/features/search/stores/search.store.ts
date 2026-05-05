@@ -1,14 +1,14 @@
 import { Injectable, Injector, computed, effect, inject, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ArtistSearchResult } from '../models/search.models';
-import { ArtistSearchService } from '../services/artist-search.service';
+import { ArtistByNameResponse } from '../../../shared/models/artist.models';
+import { ArtistApiService } from '../../../shared/services/artist-api.service';
 
 @Injectable({ providedIn: 'root' })
 export class SearchStore {
-  private readonly artistSearchService = inject(ArtistSearchService);
+  private readonly artistService = inject(ArtistApiService);
   private readonly injector = inject(Injector);
   readonly query = signal('');
-  readonly artists = signal<ArtistSearchResult[]>([]);
+  readonly artists = signal<ArtistByNameResponse[]>([]);
   readonly isLoading = signal(false);
   readonly errorMessage = signal<string | null>(null);
   readonly hasResults = computed(() => this.artists().length > 0);
@@ -35,7 +35,7 @@ export class SearchStore {
         }
 
         this.isLoading.set(true);
-        searchSubscription = this.artistSearchService.searchArtists(trimmedQuery).subscribe({
+        searchSubscription = this.artistService.searchArtists(trimmedQuery).subscribe({
           next: (artists) => {
             this.artists.set(artists);
           },
