@@ -1,4 +1,4 @@
-import { Injectable, Injector, computed, effect, inject, signal } from '@angular/core';
+import { DestroyRef, Injectable, Injector, computed, effect, inject, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ArtistApiService } from '../services/artist-api.service';
 import { ArtistbyIDResponse, ArtistByNameResponse, DeezerAlbum } from '../models/artist.models';
@@ -7,6 +7,14 @@ import { ArtistbyIDResponse, ArtistByNameResponse, DeezerAlbum } from '../models
 export class ArtistStore {
   private readonly artistApiService = inject(ArtistApiService);
   private readonly injector = inject(Injector);
+  private readonly destroyRef = inject(DestroyRef);
+  private artistByIdSubscription?: Subscription;
+  private albumsByArtistSubscription?: Subscription;
+  // runs when store is detroyed
+  private readonly registerDestroyCleanup = this.destroyRef.onDestroy(() => {
+    this.artistByIdSubscription?.unsubscribe();
+    this.albumsByArtistSubscription?.unsubscribe();
+  });
   readonly query = signal('');
   readonly artists = signal<ArtistByNameResponse[]>([]);
   readonly selectedArtist = signal<ArtistbyIDResponse | null>(null);
@@ -60,10 +68,11 @@ export class ArtistStore {
   }
 
   loadArtistById(id: number): void {
+    this.artistByIdSubscription?.unsubscribe();
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
-    this.artistApiService.getArtistById(id).subscribe({
+    this.artistByIdSubscription = this.artistApiService.getArtistById(id).subscribe({
       next: (artist) => this.selectedArtist.set(artist),
       error: () => {
         this.errorMessage.set('Error loading artist profile. Please try again.');
@@ -81,11 +90,12 @@ export class ArtistStore {
   readonly albums = signal<DeezerAlbum[]>([]);
 
   loadAlbumsByArtistId(id: number): void {
+    this.albumsByArtistSubscription?.unsubscribe();
     this.isLoading.set(true);
     this.errorMessage.set(null);
     this.hasLoadedAlbums.set(false);
 
-    this.artistApiService.getAlbumsByArtistId(id).subscribe({
+    this.albumsByArtistSubscription = this.artistApiService.getAlbumsByArtistId(id).subscribe({
       next: (albums) => {
         this.albums.set(albums);
         this.hasLoadedAlbums.set(true);
