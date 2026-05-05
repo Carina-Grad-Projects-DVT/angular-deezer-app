@@ -3,9 +3,9 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, of, map } from 'rxjs';
 import { BASE_URL } from '../../../environments/environment';
 import {
+  AlbumByArtistResponse,
   ArtistbyIDResponse,
   ArtistByNameResponse,
-  DeezerAlbum,
   DeezerArtistAlbumsResponse,
   DeezerResponse,
 } from '../models/artist.models';
@@ -33,7 +33,13 @@ export class ArtistApiService {
     return this.http.get<ArtistbyIDResponse>(`${this.apiBaseUrl}/artist/${id}`);
   }
 
-  getAlbumsByArtistId(id: number): Observable<DeezerAlbum[]> {
+  getAlbumsByArtistId(id: number): Observable<AlbumByArtistResponse[]> {
+    return this.http
+      .get<DeezerArtistAlbumsResponse>(`${this.apiBaseUrl}/artist/${id}/albums`)
+      .pipe(map((response) => response.data));
+  }
+
+  getAlbumsByArtistId(id: number): Observable<AlbumByArtistResponse[]> {
     return this.http
       .get<DeezerArtistAlbumsResponse>(`${this.apiBaseUrl}/artist/${id}/albums`)
       .pipe(map((response) => response.data));

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
-import { SearchStore } from '../../stores/search.store';
+import { ArtistStore } from '../../../../shared/stores/artist.store';
 
 // nice to have TODO: Add autocomplete
 
@@ -11,7 +11,7 @@ import { SearchStore } from '../../stores/search.store';
   imports: [InputTextModule],
 })
 export class SearchInput {
-  readonly searchStore = inject(SearchStore);
+  readonly searchStore = inject(ArtistStore);
   onInput(value: string): void {
     this.searchStore.setQuery(value);
   }

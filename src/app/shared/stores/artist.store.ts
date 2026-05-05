@@ -1,7 +1,11 @@
 import { DestroyRef, Injectable, Injector, computed, effect, inject, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ArtistApiService } from '../services/artist-api.service';
-import { ArtistbyIDResponse, ArtistByNameResponse, DeezerAlbum } from '../models/artist.models';
+import {
+  AlbumByArtistResponse,
+  ArtistbyIDResponse,
+  ArtistByNameResponse,
+} from '../models/artist.models';
 
 @Injectable({ providedIn: 'root' })
 export class ArtistStore {
@@ -87,7 +91,7 @@ export class ArtistStore {
     this.selectedArtist.set(null);
   }
 
-  readonly albums = signal<DeezerAlbum[]>([]);
+  readonly albums = signal<AlbumByArtistResponse[]>([]);
 
   loadAlbumsByArtistId(id: number): void {
     this.albumsByArtistSubscription?.unsubscribe();
