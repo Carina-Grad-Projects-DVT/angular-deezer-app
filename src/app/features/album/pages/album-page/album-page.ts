@@ -4,12 +4,13 @@ import { GenreService } from '../../../../shared/services/genre.service';
 import { Component, computed, effect, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TrackList } from '../../components/track-list';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-album-page',
   standalone: true,
   templateUrl: './album-page.html',
-  imports: [CardModule, TrackList],
+  imports: [CardModule, TrackList, DatePipe],
 })
 export class AlbumPage implements OnInit {
   private readonly route = inject(ActivatedRoute);
