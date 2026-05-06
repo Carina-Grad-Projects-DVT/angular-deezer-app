@@ -1,7 +1,12 @@
 import { DestroyRef, Injectable, Injector, computed, effect, inject, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ArtistApiService } from '../services/artist-api.service';
-import { ArtistbyIDResponse, ArtistByNameResponse, DeezerAlbum } from '../models/artist.models';
+import {
+  AlbumByArtistResponse,
+  AlbumById,
+  ArtistbyIDResponse,
+  ArtistByNameResponse,
+} from '../models/artist.models';
 
 @Injectable({ providedIn: 'root' })
 export class ArtistStore {
@@ -10,14 +15,18 @@ export class ArtistStore {
   private readonly destroyRef = inject(DestroyRef);
   private artistByIdSubscription?: Subscription;
   private albumsByArtistSubscription?: Subscription;
+  private albumByIdSubscription?: Subscription;
   // runs when store is detroyed
   private readonly registerDestroyCleanup = this.destroyRef.onDestroy(() => {
     this.artistByIdSubscription?.unsubscribe();
     this.albumsByArtistSubscription?.unsubscribe();
+    this.albumByIdSubscription?.unsubscribe();
   });
   readonly query = signal('');
   readonly artists = signal<ArtistByNameResponse[]>([]);
   readonly selectedArtist = signal<ArtistbyIDResponse | null>(null);
+  readonly album = signal<AlbumByArtistResponse | null>(null);
+  readonly selectedAlbum = signal<AlbumById | null>(null);
   readonly hasLoadedAlbums = signal(false);
   readonly isLoading = signal(false);
   readonly errorMessage = signal<string | null>(null);
@@ -87,7 +96,7 @@ export class ArtistStore {
     this.selectedArtist.set(null);
   }
 
-  readonly albums = signal<DeezerAlbum[]>([]);
+  readonly albums = signal<AlbumByArtistResponse[]>([]);
 
   loadAlbumsByArtistId(id: number): void {
     this.albumsByArtistSubscription?.unsubscribe();
@@ -104,6 +113,21 @@ export class ArtistStore {
         this.errorMessage.set('Error loading artist albums. Please try again.');
         this.albums.set([]);
         this.hasLoadedAlbums.set(true);
+        this.isLoading.set(false);
+      },
+      complete: () => this.isLoading.set(false),
+    });
+  }
+  loadAlbumById(id: number): void {
+    this.albumByIdSubscription?.unsubscribe();
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
+
+    this.albumByIdSubscription = this.artistApiService.getAlbumById(id).subscribe({
+      next: (album) => this.selectedAlbum.set(album),
+      error: () => {
+        this.errorMessage.set('Error loading album. Please try again.');
+        this.selectedAlbum.set(null);
         this.isLoading.set(false);
       },
       complete: () => this.isLoading.set(false),

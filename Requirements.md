@@ -39,8 +39,8 @@ Build something impressive. Search for artists, explore albums, display track li
 
 - A repo with a meaningful README (setup instructions, Spotify app credentials, scripts)
 - Many, many commits — grouped by feature, no broken/partial commits
-- **Meaningful** branches (`feature/`, `fix/`, `chore/`)
-- PRs that you haven't approved yourself — this means talking to one another
+- [x] **Meaningful** branches (`feature/`, `fix/`, `chore/`)
+- [x] PRs that you haven't approved yourself — this means talking to one another
 - Bonus points for meaningful comments on peers' work
 
 ---

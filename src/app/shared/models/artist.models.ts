@@ -2,6 +2,11 @@ export interface DeezerResponse<T> {
   data: T[];
 }
 
+export interface DeezerPaginatedResponse<T> extends DeezerResponse<T> {
+  total: number;
+  next?: string;
+}
+
 export interface ArtistByNameResponse {
   id: number;
   name: string;
@@ -23,12 +28,28 @@ export interface ArtistbyIDResponse extends ArtistByNameResponse {
 }
 
 export interface DeezerArtistAlbumsResponse {
-  data: DeezerAlbum[];
+  data: AlbumByArtistResponse[];
   total: number;
   next?: string;
 }
 
-export interface DeezerAlbum {
+export interface DeezerArtistSummary {
+  id: number;
+  name: string;
+  link: string;
+
+  picture: string;
+  picture_small: string;
+  picture_medium: string;
+  picture_big: string;
+  picture_xl: string;
+
+  tracklist: string;
+
+  type: 'artist';
+}
+
+export interface AlbumByArtistResponse {
   id: number;
   title: string;
   link: string;
@@ -46,4 +67,50 @@ export interface DeezerAlbum {
   explicit_lyrics: boolean;
   type: 'album';
   artist: DeezerArtistAlbumsResponse;
+}
+
+export interface AlbumTrackResponse {
+  id: number;
+  title: string;
+  duration: number;
+  preview: string;
+  track_position: number;
+  type: 'track';
+}
+
+export interface DeezerAlbumTracksResponse {
+  data: AlbumTrackResponse[];
+}
+
+export interface AlbumById {
+  id: number;
+  title: string;
+  link: string;
+
+  cover: string;
+  cover_small: string;
+  cover_medium: string;
+  cover_big: string;
+  cover_xl: string;
+
+  md5_image: string;
+  genre_id: number;
+  fans: number;
+
+  release_date: string; // YYYY-MM-DD
+  record_type: 'album' | 'single' | 'ep' | string;
+
+  tracklist: string;
+  explicit_lyrics: boolean;
+
+  type: 'album';
+
+  artist: DeezerArtistSummary;
+  tracks: DeezerAlbumTracksResponse;
+}
+
+export interface DeezerAlbumResponse {
+  data: AlbumById;
+  total: number;
+  next?: string;
 }
