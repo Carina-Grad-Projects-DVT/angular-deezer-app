@@ -1,7 +1,8 @@
 import { ArtistStore } from '../../../../shared/stores/artist.store';
 import { CardModule } from 'primeng/card';
 import { GenreService } from '../../../../shared/services/genre.service';
-import { Component, computed, effect, inject, OnInit } from '@angular/core';
+import { DeezerGenre } from '../../../../shared/models/genre.models';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TrackList } from '../../components/track-list';
 import { DatePipe } from '@angular/common';
@@ -18,16 +19,15 @@ export class AlbumPage implements OnInit {
   readonly genreService = inject(GenreService);
 
   album = this.artistStore.selectedAlbum;
-  genre = computed(() => {
-    const album = this.album();
-    if (!album) return null;
-    return this.genreService.getGenreSignal(album.genre_id)();
-  });
+  genre = signal<DeezerGenre | null>(null);
   private genreEffect = effect(() => {
     const album = this.album();
-    if (album) {
-      this.genreService.getGenreSignal(album.genre_id);
+    if (!album) {
+      this.genre.set(null);
+      return;
     }
+    const genreSignal = this.genreService.getGenreSignal(album.genre_id);
+    this.genre.set(genreSignal());
   });
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
