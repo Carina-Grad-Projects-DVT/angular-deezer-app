@@ -17,21 +17,18 @@ export class AlbumPage implements OnInit {
   readonly artistStore = inject(ArtistStore);
   readonly genreService = inject(GenreService);
 
-  album = this.artistStore.selectedAlbum; // Signal<AlbumById | null>
-
+  album = this.artistStore.selectedAlbum;
   genre = computed(() => {
     const album = this.album();
     if (!album) return null;
     return this.genreService.getGenreSignal(album.genre_id)();
   });
-
   private genreEffect = effect(() => {
     const album = this.album();
     if (album) {
       this.genreService.getGenreSignal(album.genre_id);
     }
   });
-
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (Number.isNaN(id)) return;

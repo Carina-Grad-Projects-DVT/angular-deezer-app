@@ -1,5 +1,5 @@
 <div>
-  <p-table [value]="tracks()" [tableStyle]="{ 'min-width': '50rem' }">
+  <p-table [value]="tracks()" class="tracklist-table">
     <ng-template pTemplate="header">
       <tr>
         <th>Track #</th>
@@ -15,7 +15,7 @@
         <td>{{ formatDuration(track.duration) }}</td>
         <td>
           @if (track.preview) {
-            <audio controls preload="none" [src]="track.preview"></audio>
+            <audio controls preload="none" [src]="track.preview" class=""></audio>
           } @else {
             <span class="text-sm text-muted-color">No preview</span>
           }

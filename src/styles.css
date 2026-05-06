@@ -95,3 +95,9 @@
   --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1536px;
 }
+
+.tracklist-table .p-datatable-table,
+.tracklist-table .p-datatable-thead > tr > th,
+.tracklist-table .p-datatable-tbody > tr > td {
+  background-color: var(--color-bg-mid);
+}
