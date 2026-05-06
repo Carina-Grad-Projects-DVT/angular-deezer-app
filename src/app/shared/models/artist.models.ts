@@ -69,6 +69,19 @@ export interface AlbumByArtistResponse {
   artist: DeezerArtistAlbumsResponse;
 }
 
+export interface AlbumTrackResponse {
+  id: number;
+  title: string;
+  duration: number;
+  preview: string;
+  track_position: number;
+  type: 'track';
+}
+
+export interface DeezerAlbumTracksResponse {
+  data: AlbumTrackResponse[];
+}
+
 export interface AlbumById {
   id: number;
   title: string;
@@ -93,6 +106,11 @@ export interface AlbumById {
   type: 'album';
 
   artist: DeezerArtistSummary;
+  tracks: DeezerAlbumTracksResponse;
 }
 
-export type DeezerAlbumsResponse = DeezerPaginatedResponse<AlbumByArtistResponse>;
+export interface DeezerAlbumResponse {
+  data: AlbumById;
+  total: number;
+  next?: string;
+}

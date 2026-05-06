@@ -1,1 +1,31 @@
-<p>Album Page Works</p>
+<div
+  class="flex flex-col items-center justify-center lg:gap-y-24 gap-16 mb:pb-16 lg:px-32 px-6 w-full"
+>
+  @if (artistStore.selectedAlbum(); as album) {
+    <div
+      class="flex flex-col md:flex-row items-center w-full rounded-lg p-16 md:px-6 md:py-10 bg-bg-mid justify-around gap-12"
+    >
+      <img
+        [src]="album.cover_xl || album.cover_big || album.cover_medium"
+        [alt]="album.title + ' cover image'"
+        class="w-1/2 md:w-[40%] lg:w-1/4 h-full object-cover shadow-md -translate-y-2"
+      />
+      <div class="flex flex-col gap-8 items-center">
+        <h1 class="text-4xl font-bold">{{ album.title }}</h1>
+        <h2 class="text-4xl font-bold">{{ album.release_date }}</h2>
+      </div>
+    </div>
+
+    <section class="w-full min-w-75 md:min-w-125">
+      <h2 class="text-2xl font-bold mb-6">Track list</h2>
+      <app-track-list [tracks]="album.tracks.data"></app-track-list>
+    </section>
+  }
+  @if (artistStore.isLoading()) {
+    <p class="text-sm text-center">Searching ...</p>
+  }
+
+  @if (artistStore.errorMessage(); as message) {
+    <p class="text-sm text-center text-red-400">{{ message }}</p>
+  }
+</div>

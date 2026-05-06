@@ -25,8 +25,8 @@ export class ArtistStore {
   readonly query = signal('');
   readonly artists = signal<ArtistByNameResponse[]>([]);
   readonly selectedArtist = signal<ArtistbyIDResponse | null>(null);
-  readonly album = signal<AlbumById | null>(null);
-  readonly selectedAlbum = signal<AlbumByArtistResponse | null>(null);
+  readonly album = signal<AlbumByArtistResponse | null>(null);
+  readonly selectedAlbum = signal<AlbumById | null>(null);
   readonly hasLoadedAlbums = signal(false);
   readonly isLoading = signal(false);
   readonly errorMessage = signal<string | null>(null);
