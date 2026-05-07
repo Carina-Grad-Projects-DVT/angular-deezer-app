@@ -16,12 +16,6 @@ export class ArtistStore {
   private artistByIdSubscription?: Subscription;
   private albumsByArtistSubscription?: Subscription;
   private albumByIdSubscription?: Subscription;
-  // runs when store is detroyed
-  private readonly registerDestroyCleanup = this.destroyRef.onDestroy(() => {
-    this.artistByIdSubscription?.unsubscribe();
-    this.albumsByArtistSubscription?.unsubscribe();
-    this.albumByIdSubscription?.unsubscribe();
-  });
   readonly query = signal('');
   readonly artists = signal<ArtistByNameResponse[]>([]);
   readonly selectedArtist = signal<ArtistbyIDResponse | null>(null);
@@ -37,39 +31,49 @@ export class ArtistStore {
       this.query().trim().length > 0 &&
       this.artists().length === 0,
   );
-  private readonly debouncedSearchEffect = effect(
-    (onCleanup) => {
-      const trimmedQuery = this.query().trim();
-      let searchSubscription: Subscription | undefined;
 
-      this.errorMessage.set(null);
+  constructor() {
+    // runs when store is destroyed
+    this.destroyRef.onDestroy(() => {
+      this.artistByIdSubscription?.unsubscribe();
+      this.albumsByArtistSubscription?.unsubscribe();
+      this.albumByIdSubscription?.unsubscribe();
+    });
 
-      const debounceTimer = setTimeout(() => {
-        if (!trimmedQuery) {
-          this.isLoading.set(false);
-          this.artists.set([]);
-          return;
-        }
+    effect(
+      (onCleanup) => {
+        const trimmedQuery = this.query().trim();
+        let searchSubscription: Subscription | undefined;
 
-        this.isLoading.set(true);
-        searchSubscription = this.artistApiService.searchArtists(trimmedQuery).subscribe({
-          next: (artists) => this.artists.set(artists),
-          error: () => {
-            this.errorMessage.set('Error fetching artists. Please try again.');
-            this.artists.set([]);
+        this.errorMessage.set(null);
+
+        const debounceTimer = setTimeout(() => {
+          if (!trimmedQuery) {
             this.isLoading.set(false);
-          },
-          complete: () => this.isLoading.set(false),
-        });
-      }, 350);
+            this.artists.set([]);
+            return;
+          }
 
-      onCleanup(() => {
-        clearTimeout(debounceTimer);
-        searchSubscription?.unsubscribe();
-      });
-    },
-    { injector: this.injector },
-  );
+          this.isLoading.set(true);
+          searchSubscription = this.artistApiService.searchArtists(trimmedQuery).subscribe({
+            next: (artists) => this.artists.set(artists),
+            error: () => {
+              this.errorMessage.set('Error fetching artists. Please try again.');
+              this.artists.set([]);
+              this.isLoading.set(false);
+            },
+            complete: () => this.isLoading.set(false),
+          });
+        }, 350);
+
+        onCleanup(() => {
+          clearTimeout(debounceTimer);
+          searchSubscription?.unsubscribe();
+        });
+      },
+      { injector: this.injector },
+    );
+  }
 
   setQuery(value: string): void {
     this.query.set(value);

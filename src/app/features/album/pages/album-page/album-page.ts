@@ -23,15 +23,18 @@ export class AlbumPage implements OnInit {
   album = this.artistStore.selectedAlbum;
   readonly playlists = this.playlistStore.playlists;
   genre = signal<DeezerGenre | null>(null);
-  private genreEffect = effect(() => {
-    const album = this.album();
-    if (!album) {
-      this.genre.set(null);
-      return;
-    }
-    const genreSignal = this.genreService.getGenreSignal(album.genre_id);
-    this.genre.set(genreSignal());
-  });
+
+  constructor() {
+    effect(() => {
+      const album = this.album();
+      if (!album) {
+        this.genre.set(null);
+        return;
+      }
+      const genreSignal = this.genreService.getGenreSignal(album.genre_id);
+      this.genre.set(genreSignal());
+    });
+  }
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (Number.isNaN(id)) return;

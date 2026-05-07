@@ -15,7 +15,10 @@ export class PlaylistStore {
   readonly playlistTracks = this.playlistTracksState.asReadonly();
   readonly isLoading = signal(true);
   readonly errorMessage = signal<string | null>(null);
-  private readonly initeStore = this.setupStore();
+
+  constructor() {
+    this.setupStore();
+  }
 
   private setupStore(): void {
     this.watchPlaylists();
