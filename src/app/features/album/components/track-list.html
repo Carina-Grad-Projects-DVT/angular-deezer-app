@@ -7,6 +7,7 @@
         <th>Name</th>
         <th>Duration</th>
         <th>Preview</th>
+        <th>Playlist</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-track let-rowIndex="rowIndex">
@@ -21,11 +22,21 @@
             <span class="text-sm text-muted-color">No preview</span>
           }
         </td>
+        <td>
+          <p-splitbutton
+            icon="pi pi-folder-plus"
+            [model]="getPlaylistMenuItems(track.id)"
+            [disabled]="!hasPlaylists()"
+            styleClass="!bg-brand-green !text-black"
+            menuButtonStyleClass="!bg-brand-green !text-black"
+            (onClick)="onSplitButtonClick(track)"
+          ></p-splitbutton>
+        </td>
       </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="4" class="text-center">No tracks available.</td>
+        <td colspan="5" class="text-center">No tracks available.</td>
       </tr>
     </ng-template>
   </p-table>

@@ -6,6 +6,7 @@ import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TrackList } from '../../components/track-list';
 import { DatePipe } from '@angular/common';
+import { PlaylistStore } from '../../../../shared/stores/playlist.store';
 
 @Component({
   selector: 'app-album-page',
@@ -17,8 +18,10 @@ export class AlbumPage implements OnInit {
   private readonly route = inject(ActivatedRoute);
   readonly artistStore = inject(ArtistStore);
   readonly genreService = inject(GenreService);
+  readonly playlistStore = inject(PlaylistStore);
 
   album = this.artistStore.selectedAlbum;
+  readonly playlists = this.playlistStore.playlists;
   genre = signal<DeezerGenre | null>(null);
   private genreEffect = effect(() => {
     const album = this.album();

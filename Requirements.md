@@ -23,8 +23,8 @@ Build something impressive. Search for artists, explore albums, display track li
 
 - [x] Search must be debounced — no API call on every keystroke
 - [x] Artist page must show bio/info alongside the discography
-- Album page must show release date, genre, and tracklist
-- Each track must display duration, track number, and a playable 30s preview
+- [x] Album page must show release date, genre, and tracklist
+- [x] Each track must display duration, track number, and a playable 30s preview
 - [x] Must use route params for each drill-down level (`/artist/:id`, `/album/:id`)
 
 **Free ideas:**
