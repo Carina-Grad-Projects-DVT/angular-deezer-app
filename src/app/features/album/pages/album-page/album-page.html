@@ -27,10 +27,8 @@
       ></app-track-list>
     </section>
   }
-  @if (isLoading()) {
-    <p class="text-sm text-center">Searching ...</p>
-  }
-  @if (errorMessage(); as message) {
-    <p class="text-sm text-center text-red-400">{{ message }}</p>
-  }
+  <app-async-state-feedback
+    [isLoading]="isLoading()"
+    [errorMessage]="errorMessage()"
+  ></app-async-state-feedback>
 </div>

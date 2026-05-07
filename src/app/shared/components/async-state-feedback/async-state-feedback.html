@@ -1,0 +1,8 @@
+@if (isLoading()) {
+  <!-- TODO: Add spinner -->
+  <p class="text-sm text-center">{{ loadingMessage() }}</p>
+}
+
+@if (errorMessage(); as message) {
+  <p class="text-sm text-center text-red-400">{{ message }}</p>
+}

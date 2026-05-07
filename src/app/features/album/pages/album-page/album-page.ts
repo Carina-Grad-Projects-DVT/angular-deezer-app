@@ -3,6 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TrackList } from '../../components/track-list';
 import { DatePipe } from '@angular/common';
+import { AsyncStateFeedback } from '../../../../shared/components/async-state-feedback/async-state-feedback';
 import { PlaylistStore } from '../../../../shared/stores/playlist.store';
 import { AlbumDetailsStore } from '../../../../shared/stores/album-details.store';
 
@@ -10,7 +11,7 @@ import { AlbumDetailsStore } from '../../../../shared/stores/album-details.store
   selector: 'app-album-page',
   standalone: true,
   templateUrl: './album-page.html',
-  imports: [CardModule, TrackList, DatePipe],
+  imports: [CardModule, TrackList, DatePipe, AsyncStateFeedback],
 })
 export class AlbumPage implements OnInit {
   private readonly route = inject(ActivatedRoute);
