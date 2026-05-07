@@ -6,16 +6,9 @@
     }
   </div>
   <p-panelMenu
-    [model]="items"
+    [model]="items()"
     [pt]="{
       panel: { class: '!border-0 !bg-transparent' },
     }"
   ></p-panelMenu>
-  <div class="mt-auto pt-4 w-full">
-    <button
-      class="w-full bg-brand-green text-black py-2 font-bold uppercase tracking-button hover:bg-semantic-error transition"
-    >
-      Logout
-    </button>
-  </div>
 </div>

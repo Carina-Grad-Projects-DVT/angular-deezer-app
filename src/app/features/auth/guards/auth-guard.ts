@@ -6,15 +6,12 @@ export const authGuard: CanActivateFn = () => {
   const auth = inject(AuthStore);
   const router = inject(Router);
 
-  // TODO: Add spinner
-  if (auth.isLoading()) {
-    return false;
-  }
+  if (auth.isLoading()) return false;
 
   if (auth.isAuthenticated()) {
-    router.navigate(['/search']);
-    return false;
+    return true;
   }
 
-  return true;
+  router.navigate(['/login']);
+  return false;
 };

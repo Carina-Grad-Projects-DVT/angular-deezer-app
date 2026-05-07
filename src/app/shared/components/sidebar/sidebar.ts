@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { PanelMenuModule } from 'primeng/panelmenu';
@@ -12,7 +12,8 @@ import { AuthStore } from '../../../features/auth/store/auth.store';
 })
 export class Sidebar {
   auth = inject(AuthStore);
-  items: MenuItem[] = [
+
+  items = computed<MenuItem[]>(() => [
     {
       label: 'Search',
       routerLink: '/search',
@@ -21,9 +22,23 @@ export class Sidebar {
       label: 'Playlists',
       routerLink: '/playlists',
     },
-    {
-      label: 'Login',
-      routerLink: '/login',
-    },
-  ];
+    // not logged in
+    ...(!this.auth.isAuthenticated()
+      ? [
+          {
+            label: 'Login',
+            routerLink: '/login',
+          },
+        ]
+      : []),
+    // logged in
+    ...(this.auth.isAuthenticated()
+      ? [
+          {
+            label: 'Logout',
+            command: () => this.auth.logout(),
+          },
+        ]
+      : []),
+  ]);
 }
