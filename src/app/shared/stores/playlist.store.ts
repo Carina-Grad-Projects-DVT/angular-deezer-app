@@ -1,8 +1,16 @@
-import { DestroyRef, Injectable, inject, signal } from '@angular/core';
+import { computed, DestroyRef, Injectable, inject, signal } from '@angular/core';
 import { liveQuery } from 'dexie';
 import { from, Subscription } from 'rxjs';
 import { db, Playlist, PlaylistTrack } from '../../../../db';
 import { AlbumTrackResponse } from '../models/artist.models';
+
+// TODO: Put in model file
+export interface PlaylistWithStats {
+  playlist: Playlist;
+  tracks: PlaylistTrack[];
+  trackCount: number;
+  totalDuration: number;
+}
 
 @Injectable({ providedIn: 'root' })
 export class PlaylistStore {
@@ -13,9 +21,29 @@ export class PlaylistStore {
   private readonly playlistTracksState = signal<PlaylistTrack[]>([]);
   readonly playlists = this.playlistsState.asReadonly();
   readonly playlistTracks = this.playlistTracksState.asReadonly();
+  readonly playlistsWithStats = computed<PlaylistWithStats[]>(() => {
+    const tracksByPlaylistId = new Map<number, PlaylistTrack[]>();
+
+    for (const track of this.playlistTracks()) {
+      const tracks = tracksByPlaylistId.get(track.playlistId) ?? [];
+      tracks.push(track);
+      tracksByPlaylistId.set(track.playlistId, tracks);
+    }
+
+    return this.playlists().map((playlist) => {
+      const tracks = tracksByPlaylistId.get(playlist.id) ?? [];
+
+      return {
+        playlist,
+        tracks,
+        trackCount: tracks.length,
+        totalDuration: tracks.reduce((total, track) => total + track.duration, 0),
+      };
+    });
+  });
   readonly isLoading = signal(true);
   readonly errorMessage = signal<string | null>(null);
-  private readonly initeStore = this.setupStore();
+  private readonly initStore = this.setupStore();
 
   private setupStore(): void {
     this.watchPlaylists();

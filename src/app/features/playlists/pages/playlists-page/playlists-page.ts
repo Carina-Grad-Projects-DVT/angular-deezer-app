@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { AccordionModule } from 'primeng/accordion';
-import { PlaylistTrack } from '../../../../../../db';
 import { formatDuration } from '../../../../shared/utils/format-duration';
 import { PlaylistStore } from '../../../../shared/stores/playlist.store';
 import { PlaylistTracks } from '../../components/playlist-tracks/playlist-tracks';
@@ -18,23 +17,11 @@ export class PlaylistsPage {
   editingPlaylistId: number | null = null;
   renameValue = '';
   readonly formatDuration = formatDuration;
-  readonly playlists = this.playlistStore.playlists;
+  readonly playlistsWithStats = this.playlistStore.playlistsWithStats;
 
   async addNewPlaylist() {
     await this.playlistStore.addPlaylist(this.newPlaylistName);
     this.newPlaylistName = '';
-  }
-
-  getTracksForPlaylist(playlistId: number): PlaylistTrack[] {
-    return this.playlistStore.getTracksForPlaylist(playlistId);
-  }
-
-  getPlaylistTrackCount(playlistId: number): number {
-    return this.playlistStore.getPlaylistTrackCount(playlistId);
-  }
-
-  getPlaylistTotalDuration(playlistId: number): number {
-    return this.playlistStore.getPlaylistTotalDuration(playlistId);
   }
 
   async deletePlaylist(playlistId: number) {

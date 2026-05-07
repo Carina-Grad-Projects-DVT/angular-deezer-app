@@ -19,34 +19,34 @@
         Add
       </button>
     </div>
-    @if (playlists().length === 0) {
+    @if (playlistsWithStats().length === 0) {
       <p class="text-muted-color">No playlists yet. Add one to get started.</p>
     } @else {
       <div class="w-full">
         <p-accordion>
-          @for (playlist of playlists(); track playlist.id) {
-            <p-accordion-panel [value]="playlist.id.toString()">
-              <p-accordion-header>{{ playlist.name }}</p-accordion-header>
+          @for (playlistState of playlistsWithStats(); track playlistState.playlist.id) {
+            <p-accordion-panel [value]="playlistState.playlist.id.toString()">
+              <p-accordion-header>{{ playlistState.playlist.name }}</p-accordion-header>
               <p-accordion-content>
                 <div class="flex justify-between mb-4">
-                  <h6>Total songs: {{ getPlaylistTrackCount(playlist.id) }}</h6>
-                  <h6>Duration: {{ formatDuration(getPlaylistTotalDuration(playlist.id)) }}</h6>
+                  <h6>Total songs: {{ playlistState.trackCount }}</h6>
+                  <h6>Duration: {{ formatDuration(playlistState.totalDuration) }}</h6>
                   <div class="flex gap-2">
                     <button
                       class="bg-brand-green rounded-lg py-2 px-4 text-sm text-black"
-                      (click)="startRename(playlist.id, playlist.name)"
+                      (click)="startRename(playlistState.playlist.id, playlistState.playlist.name)"
                     >
                       Rename
                     </button>
                     <p-button
-                      (click)="deletePlaylist(playlist.id)"
+                      (click)="deletePlaylist(playlistState.playlist.id)"
                       [rounded]="true"
                       styleClass="!bg-semantic-error !border-none"
                       icon="pi pi-trash"
                     />
                   </div>
                 </div>
-                @if (editingPlaylistId === playlist.id) {
+                @if (editingPlaylistId === playlistState.playlist.id) {
                   <div class="flex gap-2 mb-4">
                     <input
                       #renameInput
@@ -54,11 +54,11 @@
                       placeholder="New playlist name"
                       [value]="renameValue"
                       (input)="renameValue = renameInput.value"
-                      (keyup.enter)="saveRename(playlist.id)"
+                      (keyup.enter)="saveRename(playlistState.playlist.id)"
                     />
                     <button
                       class="bg-brand-green-border rounded-lg py-2 px-4 text-sm text-black"
-                      (click)="saveRename(playlist.id)"
+                      (click)="saveRename(playlistState.playlist.id)"
                     >
                       Save
                     </button>
@@ -67,12 +67,10 @@
                     </button>
                   </div>
                 }
-                @if (getTracksForPlaylist(playlist.id).length === 0) {
+                @if (playlistState.trackCount === 0) {
                   <p class="m-0 text-muted-color">No tracks in this playlist yet.</p>
                 } @else {
-                  <app-playlist-tracks
-                    [tracks]="getTracksForPlaylist(playlist.id)"
-                  ></app-playlist-tracks>
+                  <app-playlist-tracks [tracks]="playlistState.tracks"></app-playlist-tracks>
                 }
               </p-accordion-content>
             </p-accordion-panel>
