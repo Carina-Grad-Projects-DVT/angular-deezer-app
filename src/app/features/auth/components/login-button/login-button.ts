@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { AuthService } from '@auth0/auth0-angular';
 import { ButtonModule } from 'primeng/button';
+import { AuthStore } from '../../store/auth.store';
 
 @Component({
   selector: 'app-login-button',
@@ -9,9 +9,9 @@ import { ButtonModule } from 'primeng/button';
   imports: [ButtonModule],
 })
 export class LoginButtonComponent {
-  private auth = inject(AuthService);
+  private auth = inject(AuthStore);
 
   loginWithRedirect(): void {
-    this.auth.loginWithRedirect();
+    this.auth.login();
   }
 }
