@@ -1,6 +1,9 @@
 <div class="h-full flex flex-col bg-bg-base p-4">
   <div class="mb-6">
     <h1 class="text-brand-green font-bold text-xl">Deezer</h1>
+    @if (auth.isAuthenticated()) {
+      <h1 class="font-bold text-md">Welcome {{ auth.displayName() }}</h1>
+    }
   </div>
   <p-panelMenu
     [model]="items"
