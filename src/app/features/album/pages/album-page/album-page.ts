@@ -1,12 +1,10 @@
-import { ArtistStore } from '../../../../shared/stores/artist.store';
 import { CardModule } from 'primeng/card';
-import { GenreService } from '../../../../shared/services/genre.service';
-import { DeezerGenre } from '../../../../shared/models/genre.models';
-import { Component, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TrackList } from '../../components/track-list';
 import { DatePipe } from '@angular/common';
 import { PlaylistStore } from '../../../../shared/stores/playlist.store';
+import { AlbumDetailsStore } from '../../../../shared/stores/album-details.store';
 
 @Component({
   selector: 'app-album-page',
@@ -16,25 +14,16 @@ import { PlaylistStore } from '../../../../shared/stores/playlist.store';
 })
 export class AlbumPage implements OnInit {
   private readonly route = inject(ActivatedRoute);
-  readonly artistStore = inject(ArtistStore);
-  readonly genreService = inject(GenreService);
+  readonly albumDetailsStore = inject(AlbumDetailsStore);
   readonly playlistStore = inject(PlaylistStore);
-
-  album = this.artistStore.selectedAlbum;
+  readonly album = this.albumDetailsStore.album;
+  readonly genre = this.albumDetailsStore.genre;
+  readonly isLoading = this.albumDetailsStore.isLoading;
+  readonly errorMessage = this.albumDetailsStore.errorMessage;
   readonly playlists = this.playlistStore.playlists;
-  genre = signal<DeezerGenre | null>(null);
-  private genreEffect = effect(() => {
-    const album = this.album();
-    if (!album) {
-      this.genre.set(null);
-      return;
-    }
-    const genreSignal = this.genreService.getGenreSignal(album.genre_id);
-    this.genre.set(genreSignal());
-  });
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (Number.isNaN(id)) return;
-    this.artistStore.loadAlbumById(id);
+    this.albumDetailsStore.loadAlbumById(id);
   }
 }

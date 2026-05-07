@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { SearchInput } from '../../components/search-input/search-input';
 import { ResultsCard } from '../../../../shared/components/results-card/results-card';
-import { ArtistStore } from '../../../../shared/stores/artist.store';
+import { ArtistSearchStore } from '../../../../shared/stores/artist.store';
 
 @Component({
   selector: 'app-search-page',
@@ -10,5 +10,5 @@ import { ArtistStore } from '../../../../shared/stores/artist.store';
   imports: [SearchInput, ResultsCard],
 })
 export class SearchPage {
-  readonly searchStore = inject(ArtistStore);
+  readonly searchStore = inject(ArtistSearchStore);
 }
