@@ -1,4 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie';
+import { AlbumTrackResponse } from './src/app/shared/models/artist.models';
 
 export interface Playlist {
   id: number;
@@ -6,15 +7,9 @@ export interface Playlist {
   createdAt: string;
 }
 
-// TODO Afterwards : Check if I need all the fields
-export interface PlaylistTrack {
-  id: number;
+export interface PlaylistTrack extends AlbumTrackResponse {
+  entryId?: number;
   playlistId: number;
-  trackId: number;
-  title: string;
-  duration: number;
-  preview: string;
-  trackPosition: number;
   artistName: string;
   albumTitle: string;
   addedAt: string;
@@ -22,28 +17,37 @@ export interface PlaylistTrack {
 
 const db = new Dexie('AngularDeezerApp') as Dexie & {
   playlists: EntityTable<Playlist, 'id'>;
-  playlistTracks: EntityTable<PlaylistTrack, 'id'>;
+  playlistTracks: EntityTable<PlaylistTrack, 'entryId'>;
 };
 
 db.version(1).stores({
   playlists: '++id, name, createdAt',
-  playlistTracks: '++id, playlistId, trackId, [playlistId+trackId]',
+  playlistTracks: '++id, playlistId, [playlistId+id]',
+});
+db.version(2).stores({
+  playlists: '++id, name, createdAt',
+  playlistTracks: null,
+});
+db.version(3).stores({
+  playlists: '++id, name, createdAt',
+  playlistTracks: '++entryId, playlistId, id, [playlistId+id]',
 });
 
 // Sample data
 db.on('populate', async () => {
   const playlistId = await db.playlists.add({
-    name: 'My first playlist',
+    name: 'Example playlist',
     createdAt: new Date().toISOString(),
   });
   await db.playlistTracks.bulkAdd([
     {
       playlistId,
-      trackId: 3135556,
+      id: 3135556,
       title: 'Harder, Better, Faster, Stronger',
       duration: 224,
       preview: 'https://cdnt-preview.dzcdn.net/api/1/1/7/5/5/0/7550.mp3',
-      trackPosition: 1,
+      track_position: 1,
+      type: 'track',
       artistName: 'Daft Punk',
       albumTitle: 'Discovery',
       addedAt: new Date().toISOString(),

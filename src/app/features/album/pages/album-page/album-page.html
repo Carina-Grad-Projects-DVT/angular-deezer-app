@@ -1,5 +1,5 @@
 <div
-  class="flex flex-col items-center justify-center lg:gap-y-24 gap-16 mb:pb-16 lg:px-20 xl:px-32 px-6 w-full"
+  class="flex flex-col items-center justify-center lg:gap-y-24 gap-32 mb:pb-16 lg:px-20 xl:px-32 px-6 w-full"
 >
   @if (artistStore.selectedAlbum(); as album) {
     <div class="flex flex-col md:flex-row w-full rounded-lg p-16 md:px-6 md:py-10 bg-bg-mid gap-24">
@@ -19,7 +19,12 @@
 
     <section class="w-full min-w-75 md:min-w-125">
       <h2 class="text-2xl font-bold mb-6">Track list</h2>
-      <app-track-list [tracks]="album.tracks.data"></app-track-list>
+      <app-track-list
+        [tracks]="album.tracks.data"
+        [playlists]="playlists()"
+        [artistName]="album.artist.name"
+        [albumTitle]="album.title"
+      ></app-track-list>
     </section>
   }
   @if (artistStore.isLoading()) {
