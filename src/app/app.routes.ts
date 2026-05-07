@@ -6,15 +6,9 @@ export const routes: Routes = [
 
   {
     path: 'login',
+    canActivate: [authGuard],
     loadComponent: () =>
-      import('./features/auth/pages/login-page/login-page').then((module) => module.LoginPage),
-  },
-  {
-    path: 'auth/callback',
-    loadComponent: () =>
-      import('./features/auth/pages/auth-callback-page/auth-callback-page').then(
-        (module) => module.AuthCallbackPage,
-      ),
+      import('./features/auth/pages/login-page/login-page').then((m) => m.LoginPage),
   },
   {
     path: 'search',
