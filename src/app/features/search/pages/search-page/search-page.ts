@@ -10,5 +10,5 @@ import { ArtistSearchStore } from '../../../../shared/stores/artist.store';
   imports: [SearchInput, ResultsCard],
 })
 export class SearchPage {
-  readonly searchStore = inject(ArtistSearchStore);
+  readonly artistSearchStore = inject(ArtistSearchStore);
 }

@@ -11,8 +11,8 @@ import { ArtistSearchStore } from '../../../../shared/stores/artist.store';
   imports: [InputTextModule],
 })
 export class SearchInput {
-  readonly searchStore = inject(ArtistSearchStore);
+  readonly artistSearchStore = inject(ArtistSearchStore);
   onInput(value: string): void {
-    this.searchStore.setQuery(value);
+    this.artistSearchStore.setQuery(value);
   }
 }

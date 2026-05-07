@@ -1,7 +1,7 @@
 import { DestroyRef, Injectable, computed, inject, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ArtistApiService } from '../services/artist-api.service';
-import { AlbumByArtistResponse, ArtistbyIDResponse } from '../models/artist.models';
+import { AlbumByArtistResponse, ArtistByIdResponse } from '../models/artist.models';
 
 @Injectable({ providedIn: 'root' })
 export class ArtistDetailsStore {
@@ -12,7 +12,7 @@ export class ArtistDetailsStore {
   private readonly isArtistLoading = signal(false);
   private readonly isAlbumsLoading = signal(false);
 
-  readonly artist = signal<ArtistbyIDResponse | null>(null);
+  readonly artist = signal<ArtistByIdResponse | null>(null);
   readonly albums = signal<AlbumByArtistResponse[]>([]);
   readonly hasLoadedAlbums = signal(false);
   readonly errorMessage = signal<string | null>(null);

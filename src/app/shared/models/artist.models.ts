@@ -18,7 +18,7 @@ export interface ArtistByNameResponse {
   type: 'artist';
 }
 
-export interface ArtistbyIDResponse extends ArtistByNameResponse {
+export interface ArtistByIdResponse extends ArtistByNameResponse {
   link: string;
   share: string;
   picture: string;
@@ -82,7 +82,7 @@ export interface DeezerAlbumTracksResponse {
   data: AlbumTrackResponse[];
 }
 
-export interface AlbumById {
+export interface AlbumByIdResponse {
   id: number;
   title: string;
   link: string;
@@ -110,7 +110,7 @@ export interface AlbumById {
 }
 
 export interface DeezerAlbumResponse {
-  data: AlbumById;
+  data: AlbumByIdResponse;
   total: number;
   next?: string;
 }

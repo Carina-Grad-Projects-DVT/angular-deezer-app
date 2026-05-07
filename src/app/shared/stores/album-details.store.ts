@@ -1,6 +1,6 @@
 import { DestroyRef, Injectable, inject, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AlbumById } from '../models/artist.models';
+import { AlbumByIdResponse } from '../models/artist.models';
 import { DeezerGenre } from '../models/genre.models';
 import { ArtistApiService } from '../services/artist-api.service';
 import { GenreService } from '../services/genre.service';
@@ -13,7 +13,7 @@ export class AlbumDetailsStore {
   private albumByIdSubscription?: Subscription;
   private genreSubscription?: Subscription;
 
-  readonly album = signal<AlbumById | null>(null);
+  readonly album = signal<AlbumByIdResponse | null>(null);
   readonly genre = signal<DeezerGenre | null>(null);
   readonly isLoading = signal(false);
   readonly errorMessage = signal<string | null>(null);
