@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { Sidebar } from './shared/components/sidebar/sidebar';
+import { PlaylistStore } from './shared/stores/playlist.store';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,7 @@ import { Sidebar } from './shared/components/sidebar/sidebar';
   styleUrl: './app.css',
 })
 export class App {
+  private readonly _playlistStore = inject(PlaylistStore);
   protected readonly title = signal('angular-deezer-app');
   protected readonly isSidebarOpen = signal(false);
 
