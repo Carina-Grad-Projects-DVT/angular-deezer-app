@@ -9,7 +9,7 @@
         class="w-1/2 md:w-[40%] lg:w-1/4 h-full object-cover shadow-md -translate-y-2"
       />
       <div class="flex flex-col justify-around items-start">
-        <h1 class="text-6xl font-bold">{{ album.title }}</h1>
+        <h1 class="text-4xl font-bold line-clamp-2">{{ album.title }}</h1>
         <h2 class="text-lg text-text-muted">{{ genre()?.name }}</h2>
         <h2 class="text-lg text-text-soft">
           Released {{ album.release_date | date: 'mediumDate' }}

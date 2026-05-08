@@ -12,6 +12,7 @@ import {
 import { ArtistApiService } from '../services/artist-api.service';
 import { ArtistByNameResponse } from '../models/artist.models';
 interface ArtistSearchState {
+  settledQuery: string;
   artists: ArtistByNameResponse[];
   isLoading: boolean;
   errorMessage: string | null;
@@ -29,6 +30,7 @@ export class ArtistSearchStore {
       switchMap((trimmedQuery) => {
         if (!trimmedQuery) {
           return of<ArtistSearchState>({
+            settledQuery: '',
             artists: [],
             isLoading: false,
             errorMessage: null,
@@ -38,18 +40,21 @@ export class ArtistSearchStore {
         return this.artistApiService.searchArtists(trimmedQuery).pipe(
           map(
             (artists): ArtistSearchState => ({
+              settledQuery: trimmedQuery,
               artists,
               isLoading: false,
               errorMessage: null,
             }),
           ),
           startWith<ArtistSearchState>({
+            settledQuery: trimmedQuery,
             artists: [],
             isLoading: true,
             errorMessage: null,
           }),
           catchError(() =>
             of<ArtistSearchState>({
+              settledQuery: trimmedQuery,
               artists: [],
               isLoading: false,
               errorMessage: 'Error fetching artists. Please try again.',
@@ -60,12 +65,14 @@ export class ArtistSearchStore {
     ),
     {
       initialValue: {
+        settledQuery: '',
         artists: [],
         isLoading: false,
         errorMessage: null,
       },
     },
   );
+  readonly settledQuery = computed(() => this.searchState().settledQuery);
   readonly artists = computed(() => this.searchState().artists);
   readonly isLoading = computed(() => this.searchState().isLoading);
   readonly errorMessage = computed(() => this.searchState().errorMessage);
@@ -74,7 +81,7 @@ export class ArtistSearchStore {
     () =>
       !this.isLoading() &&
       !this.errorMessage() &&
-      this.query().trim().length > 0 &&
+      this.settledQuery().length > 0 &&
       this.artists().length === 0,
   );
 

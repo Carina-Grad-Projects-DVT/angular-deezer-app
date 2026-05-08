@@ -5,24 +5,26 @@
     [isLoading]="artistSearchStore.isLoading()"
     [errorMessage]="artistSearchStore.errorMessage()"
   ></app-async-state-feedback>
-  @if (artistSearchStore.hasSearchResults()) {
-    <div
-      class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full min-w-75 md:min-w-125 lg:grid-cols-3 lg:px-32 md:px-16 px-6"
-    >
-      @for (artist of artistSearchStore.artists(); track artist.id) {
-        <app-results-card
-          [title]="artist.name"
-          [subtitle]="artist.nb_album + ' albums'"
-          [imageUrl]="artist.picture_medium"
-          [imageAlt]="artist.name + ' profile image'"
-          [routeLink]="['/artist', artist.id]"
-          [ariaLabel]="'Open artist page for ' + artist.name"
-        ></app-results-card>
-      }
-    </div>
-  }
+  @defer (when artistSearchStore.hasSearchResults() || artistSearchStore.isSearchEmptyState()) {
+    @if (artistSearchStore.hasSearchResults()) {
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full min-w-75 md:min-w-125 lg:grid-cols-3 lg:px-32 md:px-16 px-6"
+      >
+        @for (artist of artistSearchStore.artists(); track artist.id) {
+          <app-results-card
+            [title]="artist.name"
+            [subtitle]="artist.nb_album + ' albums'"
+            [imageUrl]="artist.picture_medium"
+            [imageAlt]="artist.name + ' profile image'"
+            [routeLink]="['/artist', artist.id]"
+            [ariaLabel]="'Open artist page for ' + artist.name"
+          ></app-results-card>
+        }
+      </div>
+    }
 
-  @if (artistSearchStore.isSearchEmptyState()) {
-    <p class="text-sm text-center">No artists found.</p>
+    @if (artistSearchStore.isSearchEmptyState()) {
+      <p class="text-sm text-center">No artists found.</p>
+    }
   }
 </div>

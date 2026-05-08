@@ -4,6 +4,7 @@ import { LoginButtonComponent } from '../../components/login-button/login-button
 import { LogoutButtonComponent } from '../../components/logout-button/logout-button';
 import { AuthService } from '@auth0/auth0-angular';
 
+// Used almost exact copy of what Auth0 provided in docs
 @Component({
   selector: 'app-login-page',
   standalone: true,

@@ -5,12 +5,13 @@ import { AsyncStateFeedback } from '../../../../shared/components/async-state-fe
 import { ActivatedRoute } from '@angular/router';
 import { ArtistDetailsStore } from '../../../../shared/stores/artist-details.store';
 import { ArtistPageResolvedData } from '../../../../shared/resolvers/artist-page.resolver';
+import { FormatBigNumberPipe } from '../../../../shared/pipes/formatBigNumber.pipe';
 
 @Component({
   selector: 'app-artist-page',
   standalone: true,
   templateUrl: './artist-page.html',
-  imports: [CardModule, ResultsCard, AsyncStateFeedback],
+  imports: [CardModule, ResultsCard, AsyncStateFeedback, FormatBigNumberPipe],
 })
 export class ArtistPage implements OnInit {
   private readonly route = inject(ActivatedRoute);

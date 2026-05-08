@@ -1,12 +1,11 @@
-<!-- TODO: Mobile friendly version -->
 <div>
   <p-table [value]="tracks()" class="tracklist-table">
     <ng-template pTemplate="header">
       <tr>
-        <th>Track #</th>
+        <th>Track</th>
         <th>Name</th>
         <th>Duration</th>
-        <th>Preview</th>
+        <th class="hidden lg:block">Preview</th>
         <th>Playlist</th>
       </tr>
     </ng-template>
@@ -15,19 +14,20 @@
         <td>{{ track.track_position || rowIndex + 1 }}</td>
         <td>{{ track.title }}</td>
         <td>{{ formatDuration(track.duration) }}</td>
-        <td>
+        <td class="hidden lg:block">
           @if (track.preview) {
-            <audio controls preload="none" [src]="track.preview" class=""></audio>
+            <audio controls preload="none" [src]="track.preview"></audio>
           } @else {
             <span class="text-sm text-muted-color">No preview</span>
           }
         </td>
         <td>
+          <!-- Button should be greyed out when disabled -->
           <p-splitbutton
             icon="pi pi-folder-plus"
             [model]="getPlaylistMenuItems(track.id)"
             [disabled]="!hasPlaylists()"
-            styleClass="!bg-brand-green !text-black"
+            styleClass="!bg-brand-green !text-black "
             menuButtonStyleClass="!bg-brand-green !text-black"
             (onClick)="onSplitButtonClick(track)"
           ></p-splitbutton>
