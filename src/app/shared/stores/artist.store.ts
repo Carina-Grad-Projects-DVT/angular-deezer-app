@@ -1,15 +1,74 @@
-import { Injectable, computed, effect, inject, signal } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  of,
+  startWith,
+  switchMap,
+} from 'rxjs';
 import { ArtistApiService } from '../services/artist-api.service';
 import { ArtistByNameResponse } from '../models/artist.models';
+interface ArtistSearchState {
+  artists: ArtistByNameResponse[];
+  isLoading: boolean;
+  errorMessage: string | null;
+}
 
 @Injectable({ providedIn: 'root' })
 export class ArtistSearchStore {
   private readonly artistApiService = inject(ArtistApiService);
   readonly query = signal('');
-  readonly artists = signal<ArtistByNameResponse[]>([]);
-  readonly isLoading = signal(false);
-  readonly errorMessage = signal<string | null>(null);
+  private readonly searchState = toSignal(
+    toObservable(this.query).pipe(
+      map((query) => query.trim()),
+      debounceTime(350),
+      distinctUntilChanged(),
+      switchMap((trimmedQuery) => {
+        if (!trimmedQuery) {
+          return of<ArtistSearchState>({
+            artists: [],
+            isLoading: false,
+            errorMessage: null,
+          });
+        }
+
+        return this.artistApiService.searchArtists(trimmedQuery).pipe(
+          map(
+            (artists): ArtistSearchState => ({
+              artists,
+              isLoading: false,
+              errorMessage: null,
+            }),
+          ),
+          startWith<ArtistSearchState>({
+            artists: [],
+            isLoading: true,
+            errorMessage: null,
+          }),
+          catchError(() =>
+            of<ArtistSearchState>({
+              artists: [],
+              isLoading: false,
+              errorMessage: 'Error fetching artists. Please try again.',
+            }),
+          ),
+        );
+      }),
+    ),
+    {
+      initialValue: {
+        artists: [],
+        isLoading: false,
+        errorMessage: null,
+      },
+    },
+  );
+  readonly artists = computed(() => this.searchState().artists);
+  readonly isLoading = computed(() => this.searchState().isLoading);
+  readonly errorMessage = computed(() => this.searchState().errorMessage);
   readonly hasSearchResults = computed(() => this.artists().length > 0);
   readonly isSearchEmptyState = computed(
     () =>
@@ -18,39 +77,6 @@ export class ArtistSearchStore {
       this.query().trim().length > 0 &&
       this.artists().length === 0,
   );
-
-  constructor() {
-    effect((onCleanup) => {
-      const trimmedQuery = this.query().trim();
-      let searchSubscription: Subscription | undefined;
-
-      this.errorMessage.set(null);
-
-      const debounceTimer = setTimeout(() => {
-        if (!trimmedQuery) {
-          this.isLoading.set(false);
-          this.artists.set([]);
-          return;
-        }
-
-        this.isLoading.set(true);
-        searchSubscription = this.artistApiService.searchArtists(trimmedQuery).subscribe({
-          next: (artists) => this.artists.set(artists),
-          error: () => {
-            this.errorMessage.set('Error fetching artists. Please try again.');
-            this.artists.set([]);
-            this.isLoading.set(false);
-          },
-          complete: () => this.isLoading.set(false),
-        });
-      }, 350);
-
-      onCleanup(() => {
-        clearTimeout(debounceTimer);
-        searchSubscription?.unsubscribe();
-      });
-    });
-  }
 
   setQuery(value: string): void {
     this.query.set(value);
