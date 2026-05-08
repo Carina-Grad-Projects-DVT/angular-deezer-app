@@ -30,7 +30,7 @@ export class AuthStore {
   logout = () =>
     this.auth.logout({
       logoutParams: {
-        returnTo: `${window.location.origin}/login`,
+        returnTo: window.location.origin,
       },
     });
 }
