@@ -1,0 +1,34 @@
+<div
+  class="flex flex-col items-center justify-center lg:gap-y-24 gap-32 mb:pb-16 lg:px-20 xl:px-32 px-6 w-full"
+>
+  @if (album(); as album) {
+    <div class="flex flex-col md:flex-row w-full rounded-lg p-16 md:px-6 md:py-10 bg-bg-mid gap-24">
+      <img
+        [src]="album.cover_xl || album.cover_big || album.cover_medium"
+        [alt]="album.title + ' cover image'"
+        class="w-1/2 md:w-[40%] lg:w-1/4 h-full object-cover shadow-md -translate-y-2"
+      />
+      <div class="flex flex-col justify-around items-start">
+        <h1 class="text-4xl font-bold line-clamp-2">{{ album.title }}</h1>
+        <h2 class="text-lg text-text-muted">{{ genre()?.name }}</h2>
+        <h2 class="text-lg text-text-soft">
+          Released {{ album.release_date | date: 'mediumDate' }}
+        </h2>
+      </div>
+    </div>
+
+    <section class="w-full min-w-75 md:min-w-125">
+      <h2 class="text-2xl font-bold mb-6">Track list</h2>
+      <app-track-list
+        [tracks]="album.tracks.data"
+        [playlists]="playlists()"
+        [artistName]="album.artist.name"
+        [albumTitle]="album.title"
+      ></app-track-list>
+    </section>
+  }
+  <app-async-state-feedback
+    [isLoading]="isLoading()"
+    [errorMessage]="errorMessage()"
+  ></app-async-state-feedback>
+</div>

@@ -1,0 +1,37 @@
+<div>
+  <p-table
+    [value]="tracks()"
+    class="tracklist-table"
+    [scrollable]="true"
+    [virtualScroll]="true"
+    [virtualScrollItemSize]="68"
+    scrollHeight="520px"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Name</th>
+        <th>Duration</th>
+        <th>Playlist</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-track>
+      <tr>
+        <td>{{ track.title }}</td>
+        <td>{{ formatDuration(track.duration) }}</td>
+        <td>
+          <p-button
+            (click)="removeTrack(track)"
+            [rounded]="true"
+            styleClass="!bg-semantic-error !border-none"
+            icon="pi pi-delete-left"
+          />
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="3" class="text-center">No tracks available.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

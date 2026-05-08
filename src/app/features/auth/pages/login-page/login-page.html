@@ -1,0 +1,52 @@
+@if (
+  {
+    loading: auth.isLoading$ | async,
+    error: auth.error$ | async,
+    isAuthenticated: auth.isAuthenticated$ | async,
+  };
+  as state
+) {
+  <div class="app-container">
+    @if (state.loading) {
+      <div class="loading-state">
+        <div class="loading-text">Loading...</div>
+      </div>
+    }
+
+    @if (!state.loading && state.error) {
+      <div class="error-state">
+        <div class="error-title">Oops!</div>
+        <div class="error-message">Something went wrong</div>
+        <div class="error-sub-message">
+          {{ state.error.message }}
+        </div>
+      </div>
+    }
+
+    @if (!state.loading && !state.error) {
+      <div class="main-card-wrapper">
+        <img
+          src="https://cdn.auth0.com/quantum-assets/dist/latest/logos/auth0/auth0-lockup-en-ondark.png"
+          alt="Auth0 Logo"
+          class="auth0-logo"
+        />
+
+        <h1 class="main-title">Welcome to Deezer</h1>
+
+        @if (state.isAuthenticated) {
+          <div class="logged-in-section">
+            <div class="logged-in-message">✅ Successfully authenticated!</div>
+
+            <app-logout-button />
+          </div>
+        } @else {
+          <div class="action-card">
+            <p class="action-text">Get started by signing in to your account</p>
+
+            <app-login-button />
+          </div>
+        }
+      </div>
+    }
+  </div>
+}

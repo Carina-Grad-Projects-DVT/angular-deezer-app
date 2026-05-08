@@ -1,0 +1,9 @@
+@if (isLoading()) {
+  <div class="card flex justify-center">
+    <p-progress-spinner ariaLabel="loading" />
+  </div>
+}
+
+@if (errorMessage(); as message) {
+  <p class="text-sm text-center text-brand-green">{{ message }}</p>
+}
