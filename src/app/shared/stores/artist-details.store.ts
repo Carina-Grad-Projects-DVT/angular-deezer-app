@@ -20,6 +20,10 @@ interface ArtistAlbumsRequestState {
 export class ArtistDetailsStore {
   private readonly artistApiService = inject(ArtistApiService);
   private readonly artistId = signal<number | null>(null);
+  private readonly resolvedData = signal<{
+    artist: ArtistByIdResponse;
+    albums: AlbumByArtistResponse[];
+  } | null>(null);
   private readonly artistState = toSignal(
     toObservable(this.artistId).pipe(
       distinctUntilChanged(),
@@ -112,15 +116,26 @@ export class ArtistDetailsStore {
     },
   );
 
-  readonly artist = computed(() => this.artistState().artist);
-  readonly albums = computed(() => this.albumsState().albums);
-  readonly hasLoadedAlbums = computed(() => this.albumsState().hasLoadedAlbums);
-  readonly errorMessage = computed(
-    () => this.artistState().errorMessage ?? this.albumsState().errorMessage,
+  readonly artist = computed(() => this.resolvedData()?.artist ?? this.artistState().artist);
+  readonly albums = computed(() => this.resolvedData()?.albums ?? this.albumsState().albums);
+  readonly hasLoadedAlbums = computed(() =>
+    this.resolvedData() ? true : this.albumsState().hasLoadedAlbums,
   );
-  readonly isLoading = computed(() => this.artistState().isLoading || this.albumsState().isLoading);
+  readonly errorMessage = computed(() =>
+    this.resolvedData()
+      ? null
+      : (this.artistState().errorMessage ?? this.albumsState().errorMessage),
+  );
+  readonly isLoading = computed(() =>
+    this.resolvedData() ? false : this.artistState().isLoading || this.albumsState().isLoading,
+  );
 
   loadArtistPageData(id: number): void {
+    this.resolvedData.set(null);
     this.artistId.set(id);
+  }
+
+  setResolvedArtistPageData(artist: ArtistByIdResponse, albums: AlbumByArtistResponse[]): void {
+    this.resolvedData.set({ artist, albums });
   }
 }

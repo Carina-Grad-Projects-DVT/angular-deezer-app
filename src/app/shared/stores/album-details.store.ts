@@ -16,6 +16,10 @@ export class AlbumDetailsStore {
   private readonly artistApiService = inject(ArtistApiService);
   private readonly genreService = inject(GenreService);
   private readonly albumId = signal<number | null>(null);
+  private readonly resolvedData = signal<{
+    album: AlbumByIdResponse;
+    genre: DeezerGenre | null;
+  } | null>(null);
   private readonly albumState = toSignal(
     toObservable(this.albumId).pipe(
       distinctUntilChanged(),
@@ -60,9 +64,11 @@ export class AlbumDetailsStore {
     },
   );
 
-  readonly album = computed(() => this.albumState().album);
-  readonly isLoading = computed(() => this.albumState().isLoading);
-  readonly errorMessage = computed(() => this.albumState().errorMessage);
+  readonly album = computed(() => this.resolvedData()?.album ?? this.albumState().album);
+  readonly isLoading = computed(() => (this.resolvedData() ? false : this.albumState().isLoading));
+  readonly errorMessage = computed(() =>
+    this.resolvedData() ? null : this.albumState().errorMessage,
+  );
   readonly genre = toSignal(
     toObservable(this.albumState).pipe(
       map((state) => state.album?.genre_id ?? null),
@@ -82,8 +88,14 @@ export class AlbumDetailsStore {
       initialValue: null,
     },
   );
+  readonly resolvedGenre = computed(() => this.resolvedData()?.genre ?? this.genre());
 
   loadAlbumById(id: number): void {
+    this.resolvedData.set(null);
     this.albumId.set(id);
+  }
+
+  setResolvedAlbumPageData(album: AlbumByIdResponse, genre: DeezerGenre | null): void {
+    this.resolvedData.set({ album, genre });
   }
 }

@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './features/auth/guards/auth-guard';
+import { albumPageResolver } from './shared/resolvers/album-page.resolver';
+import { artistPageResolver } from './shared/resolvers/artist-page.resolver';
 
 export const routes: Routes = [
   {
@@ -21,12 +23,18 @@ export const routes: Routes = [
   {
     path: 'artist/:id',
     canActivate: [authGuard],
+    resolve: {
+      artistPageData: artistPageResolver,
+    },
     loadComponent: () =>
       import('./features/artist/pages/artist-page/artist-page').then((m) => m.ArtistPage),
   },
   {
     path: 'album/:id',
     canActivate: [authGuard],
+    resolve: {
+      albumPageData: albumPageResolver,
+    },
     loadComponent: () =>
       import('./features/album/pages/album-page/album-page').then((m) => m.AlbumPage),
   },
