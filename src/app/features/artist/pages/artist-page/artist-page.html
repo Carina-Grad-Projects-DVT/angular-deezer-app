@@ -1,7 +1,7 @@
 <div
   class="flex flex-col items-center justify-center lg:gap-y-24 gap-16 mb:pb-16 lg:px-32 px-6 w-full"
 >
-  @if (artistStore.selectedArtist(); as artist) {
+  @if (artistDetailsStore.artist(); as artist) {
     <div
       class="flex flex-col md:flex-row items-center w-full rounded-lg p-16 md:px-6 md:py-10 bg-bg-mid justify-around gap-12"
     >
@@ -26,18 +26,14 @@
     </div>
   }
 
-  <!-- TODO: Use spinner -->
-  @if (artistStore.isLoading()) {
-    <p class="text-sm text-center">Searching ...</p>
-  }
+  <app-async-state-feedback
+    [isLoading]="artistDetailsStore.isLoading()"
+    [errorMessage]="artistDetailsStore.errorMessage()"
+  ></app-async-state-feedback>
 
-  @if (artistStore.errorMessage(); as message) {
-    <p class="text-sm text-center text-red-400">{{ message }}</p>
-  }
-
-  @if (artistStore.albums().length > 0) {
+  @if (artistDetailsStore.albums().length > 0) {
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full min-w-75 md:min-w-125 lg:grid-cols-3">
-      @for (album of artistStore.albums(); track album.id) {
+      @for (album of artistDetailsStore.albums(); track album.id) {
         <app-results-card
           [title]="album.title"
           [subtitle]="album.record_type"
@@ -51,10 +47,10 @@
   }
 
   @if (
-    artistStore.hasLoadedAlbums() &&
-    !artistStore.isLoading() &&
-    !artistStore.errorMessage() &&
-    artistStore.albums().length === 0
+    artistDetailsStore.hasLoadedAlbums() &&
+    !artistDetailsStore.isLoading() &&
+    !artistDetailsStore.errorMessage() &&
+    artistDetailsStore.albums().length === 0
   ) {
     <p class="text-sm text-center">No albums found for this artist.</p>
   }

@@ -4,8 +4,8 @@ import { Observable, of, map } from 'rxjs';
 import { BASE_URL } from '../../../environments/environment';
 import {
   AlbumByArtistResponse,
-  AlbumById,
-  ArtistbyIDResponse,
+  AlbumByIdResponse,
+  ArtistByIdResponse,
   ArtistByNameResponse,
   DeezerArtistAlbumsResponse,
   DeezerResponse,
@@ -30,8 +30,8 @@ export class ArtistApiService {
       .pipe(map((response) => response.data));
   }
 
-  getArtistById(id: number): Observable<ArtistbyIDResponse> {
-    return this.http.get<ArtistbyIDResponse>(`${this.apiBaseUrl}/artist/${id}`);
+  getArtistById(id: number): Observable<ArtistByIdResponse> {
+    return this.http.get<ArtistByIdResponse>(`${this.apiBaseUrl}/artist/${id}`);
   }
 
   getAlbumsByArtistId(id: number): Observable<AlbumByArtistResponse[]> {
@@ -40,7 +40,7 @@ export class ArtistApiService {
       .pipe(map((response) => response.data));
   }
 
-  getAlbumById(id: number): Observable<AlbumById> {
-    return this.http.get<AlbumById>(`${this.apiBaseUrl}/album/${id}`);
+  getAlbumById(id: number): Observable<AlbumByIdResponse> {
+    return this.http.get<AlbumByIdResponse>(`${this.apiBaseUrl}/album/${id}`);
   }
 }
