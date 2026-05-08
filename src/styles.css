@@ -102,5 +102,5 @@
 .tracklist-table .p-datatable-tbody > tr > td {
   background-color: var(--color-bg-mid);
   border: 1px solid var(--color-bg-mid);
-  border-radius: 0.5rem;
+  border-radius: 8px;
 }
