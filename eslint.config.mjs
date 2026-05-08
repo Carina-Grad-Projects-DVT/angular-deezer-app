@@ -1,8 +1,3 @@
-// TODO: Write notes on why I'm using .mjs and not .js + smart in eqeqeq
-
-// Run everything : npx eslint .
-// Run for angular : ng lint .
-
 import js from '@eslint/js';
 import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
