@@ -1,14 +1,17 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { AuthStore } from '../store/auth.store';
 
 export const authGuard: CanActivateFn = () => {
+  const auth = inject(AuthStore);
   const router = inject(Router);
-  // TODO: Replace with real auth check using Deezer OAuth flow details.
-  const isAuthenticated = true;
 
-  if (isAuthenticated) {
+  if (auth.isLoading()) return false;
+
+  if (auth.isAuthenticated()) {
     return true;
   }
 
-  return router.createUrlTree(['/login']);
+  router.navigate(['/login']);
+  return false;
 };
