@@ -4,6 +4,7 @@ import { ResultsCard } from '../../../../shared/components/results-card/results-
 import { AsyncStateFeedback } from '../../../../shared/components/async-state-feedback/async-state-feedback';
 import { ActivatedRoute } from '@angular/router';
 import { ArtistDetailsStore } from '../../../../shared/stores/artist-details.store';
+import { ArtistPageResolvedData } from '../../../../shared/resolvers/artist-page.resolver';
 
 @Component({
   selector: 'app-artist-page',
@@ -16,12 +17,16 @@ export class ArtistPage implements OnInit {
   readonly artistDetailsStore = inject(ArtistDetailsStore);
 
   ngOnInit(): void {
-    // gets id from route param
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    const resolvedData = this.route.snapshot.data[
+      'artistPageData'
+    ] as ArtistPageResolvedData | null;
 
-    if (Number.isNaN(id)) {
+    if (resolvedData) {
+      this.artistDetailsStore.setResolvedArtistPageData(resolvedData.artist, resolvedData.albums);
       return;
     }
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (Number.isNaN(id)) return;
 
     this.artistDetailsStore.loadArtistPageData(id);
   }

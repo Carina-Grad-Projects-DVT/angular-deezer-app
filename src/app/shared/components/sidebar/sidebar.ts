@@ -17,10 +17,12 @@ export class Sidebar {
     {
       label: 'Search',
       routerLink: '/search',
+      routerLinkActiveOptions: { exact: true },
     },
     {
       label: 'Playlists',
       routerLink: '/playlists',
+      routerLinkActiveOptions: { exact: true },
     },
     // not logged in
     ...(!this.auth.isAuthenticated()
@@ -28,6 +30,7 @@ export class Sidebar {
           {
             label: 'Login',
             routerLink: '/login',
+            routerLinkActiveOptions: { exact: true },
           },
         ]
       : []),
@@ -37,6 +40,7 @@ export class Sidebar {
           {
             label: 'Logout',
             command: () => this.auth.logout(),
+            routerLinkActiveOptions: { exact: true },
           },
         ]
       : []),
