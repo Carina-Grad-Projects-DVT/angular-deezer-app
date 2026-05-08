@@ -14,7 +14,9 @@
         <h1 class="text-4xl lg:text-6xl font-bold text-center line-clamp-1">{{ artist.name }}</h1>
         <div class="flex gap-8">
           <p-card class="!bg-bg-mid">
-            <p class="text-sm text-muted-color text-center">{{ artist.nb_fan }}</p>
+            <p class="text-sm text-muted-color text-center">
+              {{ artist.nb_fan | formatBigNumber }}
+            </p>
             <p class="text-md font-bold text-center uppercase">Fans</p>
           </p-card>
           <p-card class="!bg-bg-mid">
