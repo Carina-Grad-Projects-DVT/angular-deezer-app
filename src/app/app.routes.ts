@@ -2,12 +2,11 @@ import { Routes } from '@angular/router';
 import { authGuard } from './features/auth/guards/auth-guard';
 import { albumPageResolver } from './shared/resolvers/album-page.resolver';
 import { artistPageResolver } from './shared/resolvers/artist-page.resolver';
-
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'search',
+    redirectTo: 'login',
   },
   {
     path: 'login',

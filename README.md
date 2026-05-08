@@ -6,20 +6,22 @@ Live deployment at https://angular-deezer-app.vercel.app
 
 ## Table of Contents
 
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Install](#install)
-  - [Run locally](#run-locally)
-- [Environment and Config](#environment-and-config)
-  - [Deezer API proxy](#deezer-api-proxy)
-  - [Auth0](#auth0)
-- [Available Scripts](#available-scripts)
-- [Quality Gates](#quality-gates)
-- [Technical Choices](#technical-choices)
-  - [State Management (Signals vs NgRx)](#state-management-signals-vs-ngrx)
-  - [PrimeNG with tailwind](#primeng-with-tailwind)
+- [Angular Deezer App](#angular-deezer-app)
+  - [Table of Contents](#table-of-contents)
+  - [Tech Stack](#tech-stack)
+  - [Project Structure](#project-structure)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Install](#install)
+    - [Run locally](#run-locally)
+  - [Environment and Config](#environment-and-config)
+    - [Deezer API proxy](#deezer-api-proxy)
+    - [Auth0](#auth0)
+  - [Available Scripts](#available-scripts)
+  - [Quality Gates](#quality-gates)
+  - [Technical Choices](#technical-choices)
+    - [State Management (Signals vs NgRx)](#state-management-signals-vs-ngrx)
+    - [PrimeNG with tailwind](#primeng-with-tailwind)
 
 ## Tech Stack
 
