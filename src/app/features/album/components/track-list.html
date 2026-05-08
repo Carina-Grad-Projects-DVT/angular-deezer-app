@@ -1,5 +1,12 @@
 <div>
-  <p-table [value]="tracks()" class="tracklist-table">
+  <p-table
+    [value]="tracks()"
+    class="tracklist-table"
+    [scrollable]="true"
+    [virtualScroll]="true"
+    [virtualScrollItemSize]="68"
+    scrollHeight="520px"
+  >
     <ng-template pTemplate="header">
       <tr>
         <th>Track</th>
