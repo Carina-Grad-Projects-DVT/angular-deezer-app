@@ -1,6 +1,13 @@
 <div
   class="flex flex-col items-center justify-center lg:gap-y-24 gap-16 mb:pb-16 lg:px-32 px-6 w-full"
 >
+  <a
+    [routerLink]="['/search']"
+    aria-label="Back to artist search"
+    class="self-start text-sm font-semibold text-brand-green hover:underline"
+  >
+    ← Back to search
+  </a>
   @if (artistDetailsStore.artist(); as artist) {
     <div
       class="flex flex-col md:flex-row items-center w-full rounded-lg p-16 md:px-6 md:py-10 bg-bg-mid justify-around gap-12"

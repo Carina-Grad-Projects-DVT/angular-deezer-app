@@ -1,6 +1,6 @@
 import { CardModule } from 'primeng/card';
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TrackList } from '../../components/track-list';
 import { DatePipe } from '@angular/common';
 import { AsyncStateFeedback } from '../../../../shared/components/async-state-feedback/async-state-feedback';
@@ -12,7 +12,7 @@ import { AlbumPageResolvedData } from '../../../../shared/resolvers/album-page.r
   selector: 'app-album-page',
   standalone: true,
   templateUrl: './album-page.html',
-  imports: [CardModule, TrackList, DatePipe, AsyncStateFeedback],
+  imports: [CardModule, TrackList, DatePipe, AsyncStateFeedback, RouterLink],
 })
 export class AlbumPage implements OnInit {
   private readonly route = inject(ActivatedRoute);
