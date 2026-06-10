@@ -2,13 +2,6 @@
   class="flex flex-col items-center justify-center lg:gap-y-24 gap-32 mb:pb-16 lg:px-20 xl:px-32 px-6 w-full"
 >
   @if (album(); as album) {
-    <a
-      [routerLink]="['/artist', album.artist.id]"
-      [attr.aria-label]="'Back to artist page for ' + album.artist.name"
-      class="self-start text-sm font-semibold text-brand-green hover:underline"
-    >
-      ← Back to {{ album.artist.name }}
-    </a>
     <div class="flex flex-col md:flex-row w-full rounded-lg p-16 md:px-6 md:py-10 bg-bg-mid gap-24">
       <img
         [src]="album.cover_xl || album.cover_big || album.cover_medium"

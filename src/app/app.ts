@@ -3,10 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { Sidebar } from './shared/components/sidebar/sidebar';
 import { PlaylistStore } from './shared/stores/playlist.store';
+import { AppBreadcrumb } from './shared/components/app-breadcrumb/app-breadcrumb';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ButtonModule, Sidebar],
+  imports: [RouterOutlet, ButtonModule, Sidebar, AppBreadcrumb],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

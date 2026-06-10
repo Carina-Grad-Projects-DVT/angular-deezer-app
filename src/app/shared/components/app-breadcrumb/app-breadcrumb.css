@@ -1,0 +1,29 @@
+:host {
+  display: block;
+}
+
+:host ::ng-deep .app-breadcrumb {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+:host ::ng-deep .app-breadcrumb .p-breadcrumb-list {
+  flex-wrap: wrap;
+}
+
+:host ::ng-deep .app-breadcrumb .p-breadcrumb-item-link {
+  color: var(--color-brand-green);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+:host ::ng-deep .app-breadcrumb .p-breadcrumb-item:last-child .p-breadcrumb-item-label {
+  color: var(--color-text-base);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+:host ::ng-deep .app-breadcrumb .p-breadcrumb-separator {
+  color: var(--color-text-muted);
+}
