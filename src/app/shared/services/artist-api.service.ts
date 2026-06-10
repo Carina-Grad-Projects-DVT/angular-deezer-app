@@ -16,6 +16,10 @@ export class ArtistApiService {
   private readonly http = inject(HttpClient);
   private readonly apiBaseUrl = BASE_URL;
 
+  private getFreshParams(params = new HttpParams()): HttpParams {
+    return params.set('_', Date.now().toString());
+  }
+
   searchArtists(query: string): Observable<ArtistByNameResponse[]> {
     const trimmedQuery = query.trim();
 
@@ -23,7 +27,7 @@ export class ArtistApiService {
       return of([]);
     }
 
-    const params = new HttpParams().set('q', trimmedQuery);
+    const params = this.getFreshParams(new HttpParams().set('q', trimmedQuery));
 
     return this.http
       .get<DeezerResponse<ArtistByNameResponse>>(`${this.apiBaseUrl}/search/artist`, { params })
@@ -31,16 +35,22 @@ export class ArtistApiService {
   }
 
   getArtistById(id: number): Observable<ArtistByIdResponse> {
-    return this.http.get<ArtistByIdResponse>(`${this.apiBaseUrl}/artist/${id}`);
+    return this.http.get<ArtistByIdResponse>(`${this.apiBaseUrl}/artist/${id}`, {
+      params: this.getFreshParams(),
+    });
   }
 
   getAlbumsByArtistId(id: number): Observable<AlbumByArtistResponse[]> {
     return this.http
-      .get<DeezerArtistAlbumsResponse>(`${this.apiBaseUrl}/artist/${id}/albums`)
+      .get<DeezerArtistAlbumsResponse>(`${this.apiBaseUrl}/artist/${id}/albums`, {
+        params: this.getFreshParams(),
+      })
       .pipe(map((response) => response.data));
   }
 
   getAlbumById(id: number): Observable<AlbumByIdResponse> {
-    return this.http.get<AlbumByIdResponse>(`${this.apiBaseUrl}/album/${id}`);
+    return this.http.get<AlbumByIdResponse>(`${this.apiBaseUrl}/album/${id}`, {
+      params: this.getFreshParams(),
+    });
   }
 }

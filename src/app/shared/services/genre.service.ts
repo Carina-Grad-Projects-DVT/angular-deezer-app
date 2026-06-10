@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, tap } from 'rxjs';
 import { BASE_URL } from '../../../environments/environment';
 import { DeezerGenre } from '../models/genre.models';
@@ -28,7 +28,9 @@ export class GenreService {
     }
 
     return this.http
-      .get<DeezerGenre>(`${this.baseUrl}/genre/${id}`)
+      .get<DeezerGenre>(`${this.baseUrl}/genre/${id}`, {
+        params: new HttpParams().set('_', Date.now().toString()),
+      })
       .pipe(tap((genre) => this.genreCache.set(id, genre)));
   }
 }
