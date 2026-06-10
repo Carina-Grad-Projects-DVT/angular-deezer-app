@@ -1,84 +1,128 @@
-import { DestroyRef, Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { liveQuery } from 'dexie';
-import { from, Subscription } from 'rxjs';
+import { catchError, from, map, of, startWith } from 'rxjs';
 import { db, Playlist, PlaylistTrack } from '../../../../db';
 import { AlbumTrackResponse } from '../models/artist.models';
+interface PlaylistCollectionState {
+  playlists: Playlist[];
+  isLoading: boolean;
+  errorMessage: string | null;
+}
+
+interface PlaylistTrackCollectionState {
+  playlistTracks: PlaylistTrack[];
+  errorMessage: string | null;
+}
 
 @Injectable({ providedIn: 'root' })
 export class PlaylistStore {
-  private readonly destroyRef = inject(DestroyRef);
-  private playlistSubscription?: Subscription;
-  private playlistTracksSubscription?: Subscription;
-  private readonly playlistsState = signal<Playlist[]>([]);
-  private readonly playlistTracksState = signal<PlaylistTrack[]>([]);
-  readonly playlists = this.playlistsState.asReadonly();
-  readonly playlistTracks = this.playlistTracksState.asReadonly();
-  readonly isLoading = signal(true);
-  readonly errorMessage = signal<string | null>(null);
-
-  constructor() {
-    this.setupStore();
-  }
-
-  private setupStore(): void {
-    this.watchPlaylists();
-    this.watchPlaylistTracks();
-
-    this.destroyRef.onDestroy(() => {
-      this.playlistSubscription?.unsubscribe();
-      this.playlistTracksSubscription?.unsubscribe();
-    });
-  }
-
-  private watchPlaylists(): void {
-    this.playlistSubscription = from(liveQuery(() => db.playlists.toArray())).subscribe({
-      next: (playlists) => {
-        this.playlistsState.set(playlists);
-        this.isLoading.set(false);
+  // tracks write-operation errors (create/rename/delete playlist, add/remove track) seperate from dexie resulting in clearer errors
+  private readonly mutationErrorMessage = signal<string | null>(null);
+  private readonly playlistsState = toSignal(
+    from(liveQuery(() => db.playlists.toArray())).pipe(
+      map(
+        (playlists): PlaylistCollectionState => ({
+          playlists,
+          isLoading: false,
+          errorMessage: null,
+        }),
+      ),
+      startWith<PlaylistCollectionState>({
+        playlists: [],
+        isLoading: true,
+        errorMessage: null,
+      }),
+      catchError(() =>
+        of<PlaylistCollectionState>({
+          playlists: [],
+          isLoading: false,
+          errorMessage: 'Error loading playlists.',
+        }),
+      ),
+    ),
+    {
+      initialValue: {
+        playlists: [],
+        isLoading: true,
+        errorMessage: null,
       },
-      error: () => {
-        this.errorMessage.set('Error loading playlists.');
-        this.isLoading.set(false);
+    },
+  );
+  private readonly playlistTracksState = toSignal(
+    from(liveQuery(() => db.playlistTracks.toArray())).pipe(
+      map(
+        (playlistTracks): PlaylistTrackCollectionState => ({
+          playlistTracks,
+          errorMessage: null,
+        }),
+      ),
+      startWith<PlaylistTrackCollectionState>({
+        playlistTracks: [],
+        errorMessage: null,
+      }),
+      catchError(() =>
+        of<PlaylistTrackCollectionState>({
+          playlistTracks: [],
+          errorMessage: 'Error loading playlist tracks.',
+        }),
+      ),
+    ),
+    {
+      initialValue: {
+        playlistTracks: [],
+        errorMessage: null,
       },
-    });
-  }
-
-  private watchPlaylistTracks(): void {
-    this.playlistTracksSubscription = from(liveQuery(() => db.playlistTracks.toArray())).subscribe({
-      next: (playlistTracks) => {
-        this.playlistTracksState.set(playlistTracks);
-      },
-      error: () => {
-        this.errorMessage.set('Error loading playlist tracks.');
-      },
-    });
-  }
+    },
+  );
+  readonly playlists = computed(() => this.playlistsState().playlists);
+  readonly playlistTracks = computed(() => this.playlistTracksState().playlistTracks);
+  readonly isLoading = computed(() => this.playlistsState().isLoading);
+  readonly errorMessage = computed(
+    () =>
+      this.mutationErrorMessage() ??
+      this.playlistsState().errorMessage ??
+      this.playlistTracksState().errorMessage,
+  );
 
   async addPlaylist(rawName: string): Promise<void> {
     const name = rawName.trim();
     if (!name) return;
-
-    this.errorMessage.set(null);
-    await db.playlists.add({
-      name,
-      createdAt: new Date().toISOString(),
-    });
+    this.mutationErrorMessage.set(null);
+    try {
+      await db.playlists.add({
+        name,
+        createdAt: new Date().toISOString(),
+      });
+    } catch (error) {
+      this.mutationErrorMessage.set('Error creating playlist.');
+      throw error;
+    }
   }
 
   async renamePlaylist(playlistId: number, rawName: string): Promise<void> {
     const name = rawName.trim();
     if (!name) return;
-
-    this.errorMessage.set(null);
-    await db.playlists.update(playlistId, { name });
+    this.mutationErrorMessage.set(null);
+    try {
+      await db.playlists.update(playlistId, { name });
+    } catch (error) {
+      this.mutationErrorMessage.set('Error renaming playlist.');
+      throw error;
+    }
   }
 
   async deletePlaylist(playlistId: number): Promise<void> {
-    this.errorMessage.set(null);
-    await db.transaction('rw', db.playlists, db.playlistTracks, async () => {
-      await db.playlistTracks.where('playlistId').equals(playlistId).delete();
-      await db.playlists.delete(playlistId);
-    });
+    this.mutationErrorMessage.set(null);
+    try {
+      await db.transaction('rw', db.playlists, db.playlistTracks, async () => {
+        await db.playlistTracks.where('playlistId').equals(playlistId).delete();
+        await db.playlists.delete(playlistId);
+      });
+    } catch (error) {
+      this.mutationErrorMessage.set('Error deleting playlist.');
+      throw error;
+    }
   }
 
   async addTrackToPlaylist(
@@ -87,32 +131,42 @@ export class PlaylistStore {
     artistName = '',
     albumTitle = '',
   ): Promise<void> {
-    this.errorMessage.set(null);
+    this.mutationErrorMessage.set(null);
 
-    const existing = await db.playlistTracks
-      .where('[playlistId+id]')
-      .equals([playlistId, track.id])
-      .first();
+    try {
+      const existing = await db.playlistTracks
+        .where('[playlistId+id]')
+        .equals([playlistId, track.id])
+        .first();
 
-    if (existing) return;
+      if (existing) return;
 
-    await db.playlistTracks.add({
-      playlistId,
-      id: track.id,
-      title: track.title,
-      duration: track.duration,
-      preview: track.preview,
-      track_position: track.track_position,
-      type: 'track',
-      artistName,
-      albumTitle,
-      addedAt: new Date().toISOString(),
-    });
+      await db.playlistTracks.add({
+        playlistId,
+        id: track.id,
+        title: track.title,
+        duration: track.duration,
+        preview: track.preview,
+        track_position: track.track_position,
+        type: 'track',
+        artistName,
+        albumTitle,
+        addedAt: new Date().toISOString(),
+      });
+    } catch (error) {
+      this.mutationErrorMessage.set('Error adding track to playlist.');
+      throw error;
+    }
   }
 
   async removeTrackFromPlaylist(playlistId: number, trackId: number): Promise<void> {
-    this.errorMessage.set(null);
-    await db.playlistTracks.where('[playlistId+id]').equals([playlistId, trackId]).delete();
+    this.mutationErrorMessage.set(null);
+    try {
+      await db.playlistTracks.where('[playlistId+id]').equals([playlistId, trackId]).delete();
+    } catch (error) {
+      this.mutationErrorMessage.set('Error removing track from playlist.');
+      throw error;
+    }
   }
 
   getTracksForPlaylist(playlistId: number): PlaylistTrack[] {

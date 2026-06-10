@@ -24,6 +24,7 @@ export class ArtistDetailsStore {
     artist: ArtistByIdResponse;
     albums: AlbumByArtistResponse[];
   } | null>(null);
+  // reactively load data whenever artistId changes, while keeping the state available as an Angular Signal
   private readonly artistState = toSignal(
     toObservable(this.artistId).pipe(
       distinctUntilChanged(),
@@ -44,6 +45,7 @@ export class ArtistDetailsStore {
               errorMessage: null,
             }),
           ),
+          // RxJS operator that makes an Observable emit one or more values immediately when someone subscribes, before any values come from the original Observable.
           startWith<ArtistRequestState>({
             artist: null,
             isLoading: true,
